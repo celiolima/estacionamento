@@ -1,0 +1,18 @@
+  div > h2 {color: #00979C;}
+  
+  h5{margin-top: 10px;margin-bottom: 0px;color: #00979C;font-size: 23px;text-align: center};
+  .body {font-family: Arial;margin: 0px;}  
+  .mostEsq{border-radius:0.4rem;color:#fff;margin: 6px;line-height:2.0rem;font-size:1.2rem;width:90%;text-align: right;} 
+  .mostDir{border-radius:0.4rem;color:#fff;margin: 6px;background-color:#1fa3ec;line-height:2.0rem;font-size:1.4rem;width:93%;text-align: center;}
+  .header{width: 100%;height: 70px;border: 10px;background-color: #F6F9F9;margin-top: 0px;}
+  .quadrado{border-style: solid;border-color: #00979C;background-color: #F6F9F9;width: 380px;height: 195px;text-align: center;display: inline-block;margin-bottom: 5px;}
+
+  .bt00d {border-radius:0.4rem;width: 185px; height: 23%;margin: 2px; cursor: pointer; float: right; background-color:#999999;}
+  .bt00e {border-radius:0.4rem;width: 185px; height: 23%;margin: 2px;cursor: pointer; float: left;background-color:#999999;}
+  .quadradoResset{border-style: solid;border-color: #00979C;background-color: #F6F9F9; width: 130px; height: 60px;text-align: center;display: inline-block;margin-bottom: 5px;}
+  .rodape{ width: 100%;height:60px; background-color: #F6F9F9; }
+  .rodape address{ background-color: #F6F9F9;width: 100%; height:35px; color:#999999;font-size:13px;font-weight:bold;font-style:normal;padding:15px 0 0; border-bottom:1px solid #CCC; text-shadow:#FFF 1px 1px 1px;}
+  
+	.alarme{border-style: solid;border-color: #00979C;background-color: #F6F9F9;width: 110px;height: 110px;text-align: center;margin: 5px; margin-top: 0px;}
+	.bt00des {height: 65%; cursor: pointer; background-color:#999999;}
+	.bt00lig {height: 65%; cursor: pointer; background-color:#ADFF85;}

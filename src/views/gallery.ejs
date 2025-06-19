@@ -1,0 +1,215 @@
+
+<%- include('headerDash'); %>
+ <!-- Begin Page Content -->
+
+  <div class="container-fluid">
+
+      <!-- Page Heading -->
+      <h1 class="h3 mb-2 text-gray-800"></h1>
+      <p class="mb-4">Selecione todas as fotos do sistema . </p>
+                      
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <div class="form-style-5">
+            <button type="button" data-toggle="modal" data-target="#Filter-export" class=" d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+              <i class="fa fa-hourglass-end" aria-hidden="true"></i>  Filto de fotos
+            </button>
+          </div>
+          <!-- Log filter -->
+          <div class="modal fade bd-example-modal-lg" id="Filter-export" tabindex="-1" role="dialog" aria-labelledby="Filter/Export" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg animate" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLongTitle">Filtre suas imagens:</h3>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form method="POST" action="/car" enctype="multipart/form-data">
+                  <div class="modal-body">
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col-lg-6 col-sm-6">
+                          <div class="panel panel-primary">
+                            
+                            <div class="panel-body">
+                            <label for="Start-Date"><b>Seleção de imagens por Data:</b></label>
+                            <input type="date" name="date_sel_start" id="date_sel_start">
+                            <label for="End -Date"><b>   Inicio</b></label>
+                            <input type="date" name="date_sel_end" id="date_sel_end">
+                            <label for="End -Date"><b>  Fim</b></label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6">
+                          <div class="panel panel-primary">
+                           
+                            <div class="panel-body">
+                              <label for="Start-Time"><b>Seleção de imagens por Hora:</b></label>
+                              <input type="time" name="time_sel_start" id="time_sel_start" value="00:00">
+                              <label for="End -Time"><b>  Inicio</b></label>
+                              <input type="time" name="time_sel_end" id="time_sel_end" value="23:00">
+                              <label for="End -Time"><b>  Fim</b></label>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button"  name="car_filter" id="car_filter" class="btn btn-success">Filtrar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- //Log filter -->
+            
+        </div>
+        <div class="card-body">        
+           <div  class="container">
+              <div id="containe" class="row  "> 
+                
+               <!--  aqui é inserido dinamicamente as foto listadas via json -->
+                     
+              </div> 
+           </div>           
+        </div>
+    </div>
+  <!-- /.container-fluid -->
+
+
+<!-- Função Monitor -->
+<!--  <script>
+  $(document).ready(function(){
+    $.ajax({
+      url: "user_log_up.php",
+      type: 'POST',
+      data: {
+          'select_date': 1,
+      }
+      }).done(function(data) {
+        $('#userslog').html(data);
+      });
+
+    setInterval(function(){
+      $.ajax({
+        url: "user_log_up.php",
+        type: 'POST',
+        data: {
+            'select_date': 0,
+        }
+        }).done(function(data) {
+          $('#userslog').html(data);
+        });
+    },5000);
+  });
+</script>
+ -->
+
+<!-- inserção das fotos filtradas -->
+<script>
+$(document).ready(function(){
+
+    // Get Report passenger
+    $(document).on('click', '#car_filter', function(){
+      
+      var date_sel_start = $('#date_sel_start').val();
+      var date_sel_end = $('#date_sel_end').val();     
+      var time_sel_start = $('#time_sel_start').val();
+      var time_sel_end = $('#time_sel_end').val();   
+      
+      $.ajax({
+        url: '/gallery',
+        type: 'POST',
+        data: {      
+          'date_sel_start': date_sel_start,
+          'date_sel_end': date_sel_end,         
+          'time_sel_start': time_sel_start,
+          'time_sel_end': time_sel_end,         
+        } ,
+        success: function (results) { 
+          let car = results.results
+          //console.log(car[0].name)
+          $('#containe').empty()
+
+          //for (let i = 0; i < car.length; i++) { 
+          car.forEach((e)=>{ 
+              $('#containe').append(
+                `                      
+                    <div id="image-viewer">
+                      <span class="close">&times;</span>
+                      <img class="modal-content" id="full-image">
+                    </div>
+                    <div class="images col-6 col-lg-2">
+                      <a  href="${e.dirImage}" download="${e.nameArquivo}"><img class="img-fluid " style="width: 100%;height: auto;"src="${e.dirImage}" alt="My Image" ></a>
+                      <a class="figure-caption">${e.name}</a>
+                      <% if (sessionUser.user == "admin") { %>  
+                      <a onclick="confirmar(${e.id})" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a> 
+                       <% } %>
+                    </div> 
+                                 
+                `              
+                );            
+              //console.log(car[0]) 
+            })
+       
+        }
+      })
+    }); 
+  });
+</script>
+<!-- inserção de todas  fotos listadas no banco -->
+<script>
+   <% nameVeic.forEach((car)=>{%>
+      $(`     
+          <div id="image-viewer">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="full-image">
+          </div>
+          <div class="images col-6 col-lg-2">
+            <img class="img-fluid " style="width: 100%;height: auto;"src="<%=car.dirImage%>" alt="My Image" />
+            <a  class="figure-caption"><%=car.name%> </a>
+            <!-- <a onclick="confirmar(<%= car.id %>)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a> -->
+          </div>
+      `).prependTo('#containe');
+      
+    <%})%>
+
+ 
+
+      $(".images img").click(function(){
+      $("#full-image").attr("src", $(this).attr("src"));
+      $('#image-viewer').show();
+      });
+
+      $("#image-viewer .close").click(function(){
+        $('#image-viewer').hide();
+      });
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+ <script> 
+  function confirmar(id) {
+    Swal.fire({
+        title: 'Confirma exclusão do registro: '+id+'?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Confirmar'
+      }).then((result) => {
+        if (result.isConfirmed) {   
+          window.location = '/gallery/delete/'+id;                              
+        }
+    });
+  };
+</script>
+  
+<%- include('footerDash'); %>
+

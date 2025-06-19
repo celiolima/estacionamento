@@ -1,0 +1,84 @@
+
+<%- include('headerDash'); %>
+ <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Usuarios</h1>
+                    <p class="mb-4">Selecione todos usuarios do sistema .</p>
+                    <!-- botão resistre -->
+                    <a href="/users/userRegister" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-plus-square fa-sm text-white-50"></i> Adicionar Usuario</a>                 
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Usuarios</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                      <thead>
+                                        <tr>
+                                          <th >ID</th>
+                                          <th >NOME</th>
+                                          <th >USUARIO</th>                                         
+                                          <th >EMAIL</th>
+                                          <th >TIPO</th>            
+                                          <th >AÇÃO</th>            
+                                        </tr>
+                                      </thead> 
+                                    <tfoot>
+                                         <tr>
+                                          <th >ID</th>
+                                          <th >NOME</th>
+                                          <th >USUARIO</th>                                          
+                                          <th >EMAIL</th>
+                                          <th >TIPO</th>            
+                                          <th >AÇÃO</th>           
+                                        </tr>
+                                    </tfoot>
+                                     <tbody> 
+                                        <% results.forEach((user)=>{%>
+                                        <tr >
+                                          <td ><%=user.id%></td>
+                                          <td ><%=user.name%></td>
+                                          <td ><%=user.user%></td>
+                                          
+                                          <td ><%=user.email%></td>
+                                          <td ><%=user.rol%></td>            
+                                          <td >
+                                            <a href="/users/edit/<%=user.id%>"class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                            <a onclick="confirmar(<%= user.id %>)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+
+                                          </td>            
+                                        </tr>
+                                        <%})%>
+                                      </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                  
+                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+      
+                      <script> 
+                        function confirmar(id) {
+                          Swal.fire({
+                              title: '¿Confirma eliminar el registro: '+id+'?',
+                              icon: 'warning',
+                              showCancelButton: true,
+                              confirmButtonColor: '#d33',
+                              cancelButtonColor: '#6c757d',
+                              confirmButtonText: 'Confirmar'
+                            }).then((result) => {
+                              if (result.isConfirmed) {   
+                                window.location = '/users/delete/'+id;                              
+                              }
+                          });
+                        };
+                      </script>
+                </div>
+                <!-- /.container-fluid -->
+  
+<%- include('footerDash'); %>
+

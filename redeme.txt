@@ -1,0 +1,189 @@
+https://iamwilliamkoller.medium.com/como-configurar-https-com-nginx-e-node-js-do-local-ao-lets-encrypt-37ce7e96f51c
+
+Quer rodar sua API com HTTPS de forma segura, tanto localmente quanto em produção? Neste guia direto ao ponto, você vai aprender a usar Nginx como proxy reverso para uma aplicação Node.js, ativando HTTPS com certificado autoassinado em ambiente local, e com Let’s Encrypt em produção — tudo isso usando Docker.
+
+🚀 O que vamos construir
+Vamos configurar:
+
+Node.js com Express + Helmet
+Nginx como proxy reverso
+HTTPS local com certificado autoassinado
+HTTPS real com Let’s Encrypt
+Docker para orquestrar tudo
+🧱 Estrutura do Projeto
+node-nginx/
+├── certs/
+├── nginx/
+├── src/
+├── Dockerfile
+├── docker-compose.yml
+└── generate-certificate.sh
+🧑‍💻 A API em Node.js
+No diretório src, criamos um app.js simples:
+
+import express from 'express';
+import helmet from 'helmet';
+
+const app = express();
+app.use(helmet());
+
+app.get('/', (req, res) => res.send('Hello World!'));
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+🐳 Dockerfile da aplicação
+Usamos a imagem node:23.8-slim para leveza e segurança:
+
+FROM node:23.8-slim AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci --omit=dev
+
+COPY . .
+
+FROM node:23.8-slim
+
+WORKDIR /app
+
+COPY --from=build /app /app
+
+ENV PORT=3000
+
+EXPOSE 3000
+
+CMD ["node", "src/app.js"]
+📦 docker-compose.yml
+version: '3.8'
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./certs:/etc/nginx/ssl
+    ports:
+      - '8001:8001'
+      - '443:443'
+    depends_on:
+      - node
+🌐 Configuração do Nginx
+O default.conf do Nginx redireciona de HTTP para HTTPS, aplica cabeçalhos de segurança e faz o proxy para o Node.js:
+
+server {
+    listen 8001;
+    server_name example.com;
+
+    # Redireciona para HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name example.com;
+
+    ssl_certificate /etc/nginx/ssl/cert.pem;
+    ssl_certificate_key /etc/nginx/ssl/key.pem;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384';
+
+    add_header X-Content-Type-Options nosniff;
+    add_header X-Frame-Options DENY;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header Referrer-Policy no-referrer-when-downgrade;
+    add_header Content-Security-Policy "default-src 'self'";
+
+    location / {
+        proxy_pass http://node:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    client_max_body_size 1M;
+}
+🔐 Gerando Certificado Autoassinado com SAN
+Crie um arquivo generate-certificate.sh com suporte a SAN (Subject Alternative Names):
+
+#!/bin/bash
+
+mkdir -p certs
+
+cat > certs/openssl-san.cnf <<EOF
+[ req ]
+default_bits       = 2048
+default_md         = sha256
+prompt             = no
+distinguished_name = dn
+x509_extensions    = v3_req
+
+[ dn ]
+C  = BR
+ST = SP
+L  = SaoPaulo
+O  = Dev
+OU = Dev
+CN = example.com
+
+[ v3_req ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = example.com
+DNS.2 = www.example.com
+DNS.3 = localhost
+EOF
+
+openssl req -x509 -nodes -days 365 \
+  -newkey rsa:2048 \
+  -keyout certs/key.pem \
+  -out certs/cert.pem \
+  -config certs/openssl-san.cnf \
+  -extensions v3_req
+
+echo "✅ Certificados gerados em: certs/cert.pem e certs/key.pem"
+🧪 Testando localmente com HTTPS
+Execute o script:
+./generate-certificate.sh
+2. Adicione ao seu /etc/hosts:
+
+127.0.0.1 example.com
+3. Rode os containers:
+
+docker-compose up --build
+
+4. Acesse: https://example.com
+Clique em “Avançado > Prosseguir” — o aviso de segurança é normal para certificados autoassinados.
+
+✅ Let’s Encrypt para produção
+Instale Certbot:
+sudo apt install certbot python3-certbot-nginx
+2. Gere o certificado real:
+
+sudo certbot --nginx -d meudominio.com -d www.meudominio.com
+3. Pronto! HTTPS válido e sem alertas.
+
+🔁 Renovação automática
+Certbot já configura isso para você, mas você pode testar:
+
+sudo certbot renew --dry-run
+🛡️ Boas práticas aplicadas
+Certificados HTTPS (autoassinados e reais)
+TLS 1.2/1.3 habilitado
+Headers de segurança (X-Frame-Options, Referrer-Policy)
+Proxy reverso para o app Node
+Docker para orquestração
+✅ Conclusão
+Agora você tem um setup profissional com HTTPS completo: tanto para desenvolvimento quanto produção. Seguro, moderno e pronto pra escalar.

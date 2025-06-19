@@ -1,0 +1,203 @@
+
+<%- include('headerDash'); %>
+ <!-- Begin Page Content -->
+  <div class="container-fluid">
+
+      <!-- Page Heading -->
+      <h1 class="h3 mb-2 text-gray-800">Registros</h1>
+      <p class="mb-4">Selecione todos Regirtos de Entradas e Saidas.</p>
+      <!-- botão resistre -->
+        
+
+       
+     
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+          <div class="card-header py-3"> 
+            <div class="form-style-5">
+             <button type="button" data-toggle="modal" data-target="#Filter-export" class=" d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+              <i class="fa fa-hourglass-end" aria-hidden="true"></i>  Filto de Registros
+            </button>
+          </div>
+          <!-- Log filter -->
+          <div class="modal fade bd-example-modal-lg" id="Filter-export" tabindex="-1" role="dialog" aria-labelledby="Filter/Export" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg animate" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLongTitle">Filtre seus Registros:</h3>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form method="POST" action="/car" enctype="multipart/form-data">
+                  <div class="modal-body">
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col-lg-6 col-sm-6">
+                          <div class="panel panel-primary">
+                            
+                            <div class="panel-body">
+                            <label for="Start-Date"><b>Filtre seus Registros por Data:</b></label>
+                            <input type="date" name="date_sel_start" id="date_sel_start">
+                            <label for="End -Date"><b>   Inicio</b></label>
+                            <input type="date" name="date_sel_end" id="date_sel_end">
+                            <label for="End -Date"><b>  Fim</b></label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6">
+                          <div class="panel panel-primary">
+                           
+                            <div class="panel-body">
+                              <label for="Start-Time"><b>Filtre seus Registros por Hora:</b></label>
+                              <input type="time" name="time_sel_start" id="time_sel_start" value="00:00">
+                              <label for="End -Time"><b>  Inicio</b></label>
+                              <input type="time" name="time_sel_end" id="time_sel_end" value="23:59">
+                              <label for="End -Time"><b>  Fim</b></label>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button"  name="Register_filter" id="Register_filter" class="btn btn-success">Filtrar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- //Log filter -->
+          </div>
+          <div class="card-body">
+              <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                          <tr>
+                            <th >ID</th>
+                            <th >NOME</th>
+                            <th >DATA </th>                                         
+                            <th >SENTIDO</th>                                                    
+                            <th >AÇÃO</th>            
+                          </tr>
+                        </thead> 
+                      <tfoot>
+                            <tr>
+                            <th ></th>
+                            <th ></th>
+                            <th ></th>                                         
+                            <th >Total</th>                                                    
+                            <th id="total"><%= total %> registros</th>          
+                          </tr>
+                      </tfoot>
+                        <tbody id="tabela"> 
+                             <!-- inserção dinamica dos dados listadas no banco -->
+                        </tbody>
+                  </table>
+              </div>
+          </div>
+         </div>
+         <!-- inserção das fotos filtradas -->
+        <script>
+        $(document).ready(function(){
+
+            // Get Report passenger
+            $(document).on('click', '#Register_filter', function(){
+            
+            var date_sel_start = $('#date_sel_start').val();
+            var date_sel_end = $('#date_sel_end').val();     
+            var time_sel_start = $('#time_sel_start').val();
+            var time_sel_end = $('#time_sel_end').val();   
+            
+            $.ajax({
+                url: '/carRegistre',
+                type: 'POST',
+                data: {      
+                'date_sel_start': date_sel_start,
+                'date_sel_end': date_sel_end,         
+                'time_sel_start': time_sel_start,
+                'time_sel_end': time_sel_end,         
+                } ,
+                success: function (results) {
+                let totaResitre = results.total
+                let carResistre = results.results
+                console.log(totaResitre)
+                $('#tabela').empty() 
+                $('#total').empty() 
+                $('#total').append(`${totaResitre}`)
+                carResistre.forEach((e)=>{ 
+                    $('#tabela').append(
+                        `      
+                            <tr >
+                                <td >${e.id}</td>
+                                <td >${e.name}</td>
+                                <td >${e.data}</td>                                          
+                                <td >${e.type}</td>
+                                                                                  
+                                <td > 
+                                  <% if (sessionUser.user == "admin") { %>                                           
+                                    <a onclick="confirmar(${e.id })" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                  <% } %>
+                                </td> 
+                             
+
+                            </tr> 
+                        `              
+                        );            
+                    //console.log(car[0]) 
+                    })                    
+            
+                }
+            })
+            }); 
+        });
+        </script>
+
+         <!-- inserção de todas  fotos listadas no banco -->
+        <script>
+        <% results.forEach((car)=>{%>
+            $(`     
+                    <tr >
+                    <td ><%=car.id%></td>
+                    <td ><%=car.name%></td>
+                    <td ><%=car.data%></td>                                          
+                    <td ><%=car.type%></td>  
+                                                                  
+                    <td > 
+                       <% if (sessionUser.user == "admin") { %>                                            
+                        <a onclick="confirmar(<%=car.id %>)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                       <% } %>
+                      </td>            
+                    </tr>                       
+                
+            `).prependTo('#tabela'); 
+            <%})%>
+             
+        </script>
+            
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+        <script> 
+          function confirmar(id) {
+            Swal.fire({
+                title: '¿Confirma eliminar el registro: '+id+'?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Confirmar'
+              }).then((result) => {
+                if (result.isConfirmed) {   
+                  window.location = '/carRegistre/delete/'+id;                              
+                }
+            });
+          };
+        </script>
+  </div>
+  <!-- /.container-fluid -->
+  
+<%- include('footerDash'); %>
+

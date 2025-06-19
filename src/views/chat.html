@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+	<title>Daskboard</title>
+
+	<!-- JQUERY -->
+	<script src="../public/js/jquery-2.2.1.js"></script>
+
+	<!-- bootstrap - link cdn -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+		integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<!-- estilo -->
+	<link href="../public/css/style.css" rel="stylesheet">
+
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			$("#exibe_chat").click(function () {
+				$("#conversa").show();
+				$("#participantes").hide();
+				ocultaNavbar();
+			});
+
+			$("#exibe_participantes").click(function () {
+				$("#participantes").show();
+				$("#conversa").hide();
+				ocultaNavbar();
+			});
+		});
+
+		function ocultaNavbar() {
+			$("#btn_navbar_toggle").attr("class", "navbar-toggle collapsed");
+			$("#navbar-collapse-1").attr("class", "navbar-collapse collapse");
+			$("#btn_navbar_toggle").attr("aria-expanded", "false");
+			$("#navbar-collapse-1").attr("aria-expanded", "false");
+		}
+	</script>
+</head>
+
+<body>
+
+
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1"
+					id="btn_navbar_toggle">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">Visão</a>
+			</div>
+
+
+			<div class="collapse navbar-collapse" id="navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="cadastro" id="exibe_chat">Cadastro</a>
+					</li>
+					<li>
+						<a href="exclusao" id="exibe_participantes">Exclusão</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+
+		<main>
+			<br> <br>
+			<h1>Controle Facial</h1>
+			<pre id="messages" style="height: 300px; overflow: scroll"></pre>
+		</main>
+
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+			<div class="container">
+				<div class="panel-body campo-mensagem">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Mensagem" id="messageBox">
+
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="enviar_mensagem">></button>
+						</span>
+
+					</div>
+
+					<div class="rodape">
+						<address>
+							Powered by STE AUTOMAÇÃO E SISTEMAS - steautomacaoesistemas.com.br <br>
+							CopyRight 2019 - Todos os direitos reservados
+							</ddress>
+
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+			integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+			crossorigin="anonymous"></script>
+		<script>
+			const sendBtn = document.querySelector('#enviar_mensagem');
+			const messages = document.querySelector('#messages');
+			const messageBox = document.querySelector('#messageBox');
+
+			let ws;
+
+			function showMessage(message) {
+				messages.textContent += `\n\n${message}`;
+				messages.scrollTop = messages.scrollHeight;
+				//messageBox.value = '';
+			}
+			//função Websocket
+			function init() {
+				if (ws) {
+					ws.onerror = ws.onopen = ws.onclose = null;
+					ws.close();
+				}
+
+				//ws = new WebSocket('ws://192.168.1.66:3000');
+				//ws = new WebSocket('ws://ws.stesistemas.com:3000');
+				ws = new WebSocket('wss://localhost:443');
+				ws.onopen = () => {
+					console.log('Connection opened!');
+
+				}
+
+
+				//recebe do menssagem do socket
+				ws.onmessage = ({ data }) => {
+					showMessage(data);
+					console.log('menssage:', data);
+				}
+
+				ws.onclose = function () {
+					console.log('Connection close!');
+					setTimeout(function timeout() {
+						console.log('tentando conexão');
+						init();
+					}, 1000);
+					ws = null;
+				}
+			}
+			//envia menssagem pro socket
+			sendBtn.onclick = function () {
+				if (!ws) {
+					showMessage("No WebSocket connection :(");
+					return;
+				}
+
+				ws.send(messageBox.value);
+				showMessage(messageBox.value);
+			}
+
+			init();
+
+		</script>
+
+</body>
+
+</html>
