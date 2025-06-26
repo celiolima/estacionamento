@@ -3,8 +3,7 @@ version: '3.8'
 services:
 
   mysql:
-    image: biarms/mysql:5.7-beta-circleci
-    #image: mysql:5.7.26
+    image: biarms/mysql:5.7-beta-circleci  
     container_name: "mysql"
     volumes:
       - .docker/db:/var/lib/mysql
@@ -68,7 +67,7 @@ services:
       traefik.http.services.node.loadbalancer.server.port: "3000"
 
 
-  networks:
-    jbjuaz:
-      external: true
+networks:
+  jbjuaz:
+    external: true
 
