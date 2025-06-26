@@ -72,12 +72,12 @@ app.use(function (req, res, next) {
 
 const appWs = require('./bin/app-ws');
 
-/* server = app.listen(process.env.PORT_SERVER || 3000, () => {
+server = app.listen(process.env.PORT_SERVER || 3000, () => {
     console.log(`SERVER corriendo en http://localhost:${process.env.PORT_SERVER}`);
-}) */
+})
 
-server.listen(443, () => {
+/* server.listen(443, () => {
     console.log('HTTPS Server running on port 443');
-});
+}); */
 
 appWs(server);
