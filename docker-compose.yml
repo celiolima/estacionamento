@@ -58,12 +58,12 @@ services:
     networks:
     - jbjuaz
 
-  labels:
-    traefik.enable: "true"
-    traefik.http.routers.node.rule: "Host(`fbjuazeiro.stesistemas.com`)"
-    traefik.http.routers.node.entrypoints: "websecure"
-    traefik.http.routers.node.tls.certresolver: "myresolver"
-    traefik.http.services.node.loadbalancer.server.port: "3000"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.node.rule: "Host(`fbjuazeiro.stesistemas.com`)"
+      traefik.http.routers.node.entrypoints: "websecure"
+      traefik.http.routers.node.tls.certresolver: "myresolver"
+      traefik.http.services.node.loadbalancer.server.port: "3000"
 
 #volumes:
 #  db_data:
