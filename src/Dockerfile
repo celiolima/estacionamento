@@ -1,7 +1,7 @@
-FROM node:23.8-slim AS build
+FROM node:22
 
 #cria diretorio /app
-WORKDIR /app
+WORKDIR /usr/src/app
 
 #copia todos aquivos iniciando por package e terminamdo em .json e na pasta app para o diretorio criado
 COPY package*.json ./
@@ -13,4 +13,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 3000
-CMD ["npm" ,"start"]
+CMD ["node", "app.js"]

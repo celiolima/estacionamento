@@ -1,9 +1,12 @@
+
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
 const express = require('express')
 const dotenv = require('dotenv')
 const path = require('path');
 var session = require('express-session')
-const https = require('https');            // para ssl
-const fs = require('fs');                  // para ssl
+
 
 // atribuindo as rotas nas variaveis
 const indexRouter = require('./routes/index');
@@ -72,12 +75,12 @@ app.use(function (req, res, next) {
 
 const appWs = require('./bin/app-ws');
 
-server = app.listen(process.env.PORT_SERVER || 3000, () => {
+/* server = app.listen(process.env.PORT_SERVER || 3000, () => {
     console.log(`SERVER corriendo en http://localhost:${process.env.PORT_SERVER}`);
-})
+}) */
 
-/* server.listen(443, () => {
-    console.log('HTTPS Server running on port 443');
-}); */
+server.listen(process.env.PORT_SERVER || 3000, () => {
+    console.log(`SERVER corriendo en http://localhost:${process.env.PORT_SERVER}`);
+});
 
 appWs(server);
