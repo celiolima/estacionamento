@@ -44,8 +44,8 @@ services:
   node:
     build: ./app   
     volumes:
-      - ./app:/usr/src/app
-      - ./certs:/usr/src/app/certs
+      - ./app:/app
+      - ./certs:/app/certs
     ports:
       - '3000:3000'
     #- '443:443'
@@ -54,7 +54,7 @@ services:
     depends_on:
       - mysql
     restart: always
-    command: bash -c /usr/src/app/start.sh
+    #command: bash -c /app/start.sh
     env_file: .env
     networks:
     - jbjuaz

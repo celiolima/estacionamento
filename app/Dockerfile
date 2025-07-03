@@ -4,7 +4,7 @@ FROM node:22
 RUN npm install -g nodemon
 
 #cria diretorio /app
-WORKDIR /usr/src/app
+WORKDIR /app
 
 #copia todos aquivos iniciando por package e terminamdo em .json e na pasta app para o diretorio criado
 COPY package*.json ./
@@ -16,5 +16,5 @@ RUN npm install
 COPY . .
 
 EXPOSE 3000
-#CMD ["node", "app.js"]
+CMD ["node", "app.js"]
 #CMD ./start.sh
