@@ -42,9 +42,9 @@ services:
       traefik.http.services.phpmyadmin.loadbalancer.server.port: "8082"
 
   node:
-    build: ./src     
+    build: ./app   
     volumes:
-      - ./src:/usr/src/app
+      - ./app:/usr/src/app
       - ./certs:/usr/src/app/certs
     ports:
       - '3000:3000'
