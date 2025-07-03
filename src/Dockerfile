@@ -1,5 +1,8 @@
 FROM node:22
 
+# We have to install nodemon globally before moving into the working directory
+RUN npm install -g nodemon
+
 #cria diretorio /app
 WORKDIR /usr/src/app
 
@@ -14,3 +17,4 @@ COPY . .
 
 EXPOSE 3000
 CMD ["node", "app.js"]
+#CMD ./start.sh

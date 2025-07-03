@@ -1,20 +1,19 @@
 {
   "name": "wsServer",
   "version": "1.0.0",
+  "description": "Node.js on Docker",
+  "author": "Celiolima <ocelio.bernardo@gmail.com>",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
-  "author": "Celiolima",
-  "keywords": [],
-  "license": "ISC",
   "dependencies": {
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
     "bcryptjs": "^2.4.3",
-    "connect-multiparty": "^2.2.0",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
-    "express": "^5.1.0",
-    "express-session": "^1.17.2",
     "mysql2": "^3.4.4",
     "ws": "^8.13.0"
   }

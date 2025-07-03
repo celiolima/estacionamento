@@ -42,8 +42,7 @@ services:
       traefik.http.services.phpmyadmin.loadbalancer.server.port: "8082"
 
   node:
-    build:
-      context: ./src     
+    build: ./src     
     volumes:
       - ./src:/usr/src/app
       - ./certs:/usr/src/app/certs
@@ -55,6 +54,8 @@ services:
     depends_on:
       - mysql
     restart: always
+    #command: bash -c /usr/src/app/start.sh
+    env_file: .env
     networks:
     - jbjuaz
 
