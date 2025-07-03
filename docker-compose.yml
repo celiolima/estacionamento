@@ -54,7 +54,7 @@ services:
     depends_on:
       - mysql
     restart: always
-    #command: bash -c /usr/src/app/start.sh
+    command: bash -c /usr/src/app/start.sh
     env_file: .env
     networks:
     - jbjuaz
