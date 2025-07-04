@@ -42,23 +42,24 @@ services:
       traefik.http.services.phpmyadmin.loadbalancer.server.port: "8082"
 
   node:
-    build: ./app   
-    volumes:
-      - ./app:/app
-      - ./certs:/app/certs
+    depends_on:
+      - mysql
+    build: ./app 
+    restart: unless-stopped
+    env_file: ./.env  
+    #volumes:
+    #  - ./app:/app
+    #- ./certs:/app/certs
     ports:
       - '3000:3000'
     #- '443:443'
     links:
       - mysql
-    depends_on:
-      - mysql
-    restart: always
-    #command: bash -c /app/start.sh
-    env_file: .env
+    #command: bash -c /app/start.sh  
+    stdin_open: true
+    tty: true
     networks:
     - jbjuaz
-
     labels:
       traefik.enable: "true"
       traefik.http.routers.node.rule: "Host(`fbjuazeiro.stesistemas.com`)"
