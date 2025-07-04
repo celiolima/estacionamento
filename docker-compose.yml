@@ -15,7 +15,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
     restart: always
     networks:
-      - jbjuaz
+      - traefik
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -33,7 +33,7 @@ services:
       - mysql
     restart: always
     networks:
-      - jbjuaz
+      - traefik
     labels:
       traefik.enable: "true"
       traefik.http.routers.phpmyadmin.rule: "Host(`phpmyadmin.stesistemas.com`)"
@@ -59,7 +59,7 @@ services:
     stdin_open: true
     tty: true
     networks:
-    - jbjuaz
+    - traefik
     labels:
       traefik.enable: "true"
       traefik.http.routers.node.rule: "Host(`fbjuazeiro.stesistemas.com`)"
@@ -71,6 +71,6 @@ services:
 #  db_data:
 
 networks:
-  jbjuaz:
+  traefik:
     external: true
 
