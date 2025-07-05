@@ -3,9 +3,9 @@
 services:
   mysql:
     image: biarms/mysql:5.7-beta-circleci   
-    container_name: "mysql"
+    #container_name: "mysql"
     volumes:
-      - .db_data:/var/lib/mysql
+      - .db_data_jbjuaz:/var/lib/mysql
     ports:
       - 3306:3306
     environment:
@@ -14,12 +14,10 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
     restart: always
-    networks:
-      - traefik
 
   phpmyadmin:
     image: phpmyadmin:latest
-    container_name: "phpmyadmin"
+    #container_name: "phpmyadmin"
     depends_on:
       - mysql
     ports:
@@ -31,21 +29,23 @@ services:
       - PMA_PASSWORD=root
     links:
       - mysql
-    restart: always
-    networks:
-      - traefik
+    restart: always 
     labels:
-      traefik.enable: "true"
-      traefik.http.routers.phpmyadmin.rule: "Host(`phpmyadmin.stesistemas.com`)"
-      traefik.http.routers.phpmyadmin.entrypoints: "websecure"
-      traefik.http.routers.phpmyadmin.tls.certresolver: "myresolver"
-      traefik.http.services.phpmyadmin.loadbalancer.server.port: "8082"
+      - "traefik.enable=true"
+      - "traefik.http.routers.wordpress.rule=Host(`phpmyadmin.stesistemas.com`) || Host(`www.phpmyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.wordpress.entrypoints=websecure"
+      - "traefik.http.routers.wordpress.tls.certresolver=leresolver"
+      - "traefik.http.services.wordpress.loadbalancer.server.port=8082"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.wordpress-secure.rule=Host(`phpmyadmin.stesistemas.com`) || Host(`www.phpmyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.wordpress-secure.entrypoints=web"
+      - "traefik.http.routers.wordpress-secure.middlewares=redirect-to-https"
 
   node:
     depends_on:
       - mysql
     build: ./app 
-    restart: unless-stopped
+    restart: always
     env_file: ./.env  
     #volumes:
     #  - ./app:/app
@@ -57,20 +57,22 @@ services:
       - mysql
     #command: bash -c /app/start.sh  
     stdin_open: true
-    tty: true
-    networks:
-    - traefik
+    tty: true  
     labels:
-      traefik.enable: "true"
-      traefik.http.routers.node.rule: "Host(`fbjuazeiro.stesistemas.com`)"
-      traefik.http.routers.node.entrypoints: "websecure"
-      traefik.http.routers.node.tls.certresolver: "myresolver"
-      traefik.http.services.node.loadbalancer.server.port: "3000"
+      - "traefik.enable=true"
+      - "traefik.http.routers.wordpress.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.wordpress.entrypoints=websecure"
+      - "traefik.http.routers.wordpress.tls.certresolver=leresolver"
+      - "traefik.http.services.wordpress.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.wordpress-secure.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.wordpress-secure.entrypoints=web"
+      - "traefik.http.routers.wordpress-secure.middlewares=redirect-to-https"    
+
+networks:
+  jbjuaz:
+    external: true
 
 #volumes:
 #  db_data:
-
-networks:
-  traefik:
-    external: true
 
