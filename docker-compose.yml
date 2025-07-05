@@ -32,14 +32,14 @@ services:
     restart: always 
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wordpress.rule=Host(`phpmyadmin.stesistemas.com`) || Host(`www.phpmyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
-      - "traefik.http.routers.wordpress.entrypoints=websecure"
-      - "traefik.http.routers.wordpress.tls.certresolver=leresolver"
-      - "traefik.http.services.wordpress.loadbalancer.server.port=8082"
+      - "traefik.http.routers.jbjuaz.rule=Host(`phpmyadmin.stesistemas.com`) || Host(`www.phpmyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.jbjuaz.entrypoints=websecure"
+      - "traefik.http.routers.jbjuaz.tls.certresolver=leresolver"
+      - "traefik.http.services.jbjuaz.loadbalancer.server.port=8082"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.routers.wordpress-secure.rule=Host(`phpmyadmin.stesistemas.com`) || Host(`www.phpmyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
-      - "traefik.http.routers.wordpress-secure.entrypoints=web"
-      - "traefik.http.routers.wordpress-secure.middlewares=redirect-to-https"
+      - "traefik.http.routers.jbjuaz-secure.rule=Host(`phpmyadmin.stesistemas.com`) || Host(`www.phpmyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.jbjuaz-secure.entrypoints=web"
+      - "traefik.http.routers.jbjuaz-secure.middlewares=redirect-to-https"
 
   node:
     depends_on:
@@ -60,14 +60,14 @@ services:
     tty: true  
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wordpress.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
-      - "traefik.http.routers.wordpress.entrypoints=websecure"
-      - "traefik.http.routers.wordpress.tls.certresolver=leresolver"
-      - "traefik.http.services.wordpress.loadbalancer.server.port=3000"
+      - "traefik.http.routers.jbjuaz.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.jbjuaz.entrypoints=websecure"
+      - "traefik.http.routers.jbjuaz.tls.certresolver=leresolver"
+      - "traefik.http.services.jbjuaz.loadbalancer.server.port=3000"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.routers.wordpress-secure.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
-      - "traefik.http.routers.wordpress-secure.entrypoints=web"
-      - "traefik.http.routers.wordpress-secure.middlewares=redirect-to-https"    
+      - "traefik.http.routers.jbjuaz-secure.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.jbjuaz-secure.entrypoints=web"
+      - "traefik.http.routers.jbjuaz-secure.middlewares=redirect-to-https"    
 
 networks:
   jbjuaz:
