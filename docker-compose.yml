@@ -5,11 +5,11 @@ services:
     image: biarms/mysql:5.7-beta-circleci   
     #container_name: "mysql"
     volumes:
-      - .db_data_jbjuaz:/var/lib/mysql
+      - db_data_jbjuaz:/var/lib/mysql
     ports:
       - 3306:3306
     environment:
-      #MYSQL_DATABASE: 
+      MYSQL_DATABASE: estacionamentojn
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
@@ -63,13 +63,12 @@ services:
       - "traefik.http.routers.fbjuaz.service=fbjuaz"
       - "traefik.http.routers.fbjuaz.tls.certresolver=leresolver"
       - "traefik.http.routers.fbjuaz.entrypoints=websecure"
-      - "traefik.http.routers.fbjuaz.tls=true"
-      
+      - "traefik.http.routers.fbjuaz.tls=true"     
 
 networks:
   jbjuaz:
     external: true
 
-#volumes:
-#  db_data:
+volumes:
+  db_data_jbjuaz:
 
