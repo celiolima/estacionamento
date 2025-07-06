@@ -30,21 +30,14 @@ services:
     links:
       - mysql
     restart: always 
-    labels:
-      - "traefik.enable=true"
-      # Router HTTPS
-      - "traefik.http.routers.paineldb-secure.rule=Host(`paineldb.stesistemas.com`) || Host(`www.paineldb.stesistemas.com`)" # Troque pelo seu Dominio
-      - "traefik.http.routers.paineldb-secure.entrypoints=websecure"
-      - "traefik.http.routers.paineldb-secure.tls.certresolver=leresolver"
-      - "traefik.http.routers.paineldb-secure.tls=true"
-      - "traefik.http.services.paineldb.loadbalancer.server.port=8082"
-
-      # Router HTTP com redirecionamento para HTTPS
-      - "traefik.http.routers.paineldb.rule=Host(`paineldb.stesistemas.com`) || Host(`www.paineldb.stesistemas.com`)" # Troque pelo seu Dominio
-      - "traefik.http.routers.paineldb.entrypoints=web"
-      - "traefik.http.routers.paineldb.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.services.paineldb.loadbalancer.server.port=8082"
+    labels:       
+      - "traefik.enable=true"      
+      - "traefik.http.routers.phpmyadmin.rule=Host(`paineldb.stesistemas.com`) || Host(`www.paineldb.stesistemas.com`)" # Troque pelo seu Dominio
+      - "traefik.http.services.phpmyadmin.loadbalancer.server.port=3000"
+      - "traefik.http.routers.phpmyadmin.service=phpmyadmin"
+      - "traefik.http.routers.phpmyadmin.tls.certresolver=leresolver"
+      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
+      - "traefik.http.routers.phpmyadmin.tls=true"
 
   node:
     depends_on:
@@ -65,19 +58,13 @@ services:
     tty: true  
     labels:
       - "traefik.enable=true"      
-      # Router HTTPS
-      - "traefik.http.routers.fbjuaz-secure.rule=Host(`fbjuaz.stesistemas.com`) || Host(`www.fbjuaz.stesistemas.com`)" # Troque pelo seu Dominio
-      - "traefik.http.routers.fbjuaz-secure.entrypoints=websecure"
-      - "traefik.http.routers.fbjuaz-secure.tls.certresolver=leresolver"
-      - "traefik.http.routers.fbjuaz-secure.tls=true"
-      - "traefik.http.services.fbjuaz.loadbalancer.server.port=3000"
-
-      # Router HTTP com redirecionamento para HTTPS
       - "traefik.http.routers.fbjuaz.rule=Host(`fbjuaz.stesistemas.com`) || Host(`www.fbjuaz.stesistemas.com`)" # Troque pelo seu Dominio
-      - "traefik.http.routers.fbjuaz.entrypoints=web"
-      - "traefik.http.routers.fbjuaz.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.services.fbjuaz.loadbalancer.server.port=3000"  
+      - "traefik.http.services.fbjuaz.loadbalancer.server.port=3000"
+      - "traefik.http.routers.fbjuaz.service=fbjuaz"
+      - "traefik.http.routers.fbjuaz.tls.certresolver=leresolver"
+      - "traefik.http.routers.fbjuaz.entrypoints=websecure"
+      - "traefik.http.routers.fbjuaz.tls=true"
+      
 
 networks:
   jbjuaz:
