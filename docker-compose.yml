@@ -2,8 +2,7 @@
 
 services:
   mysql:
-    image: biarms/mysql:5.7-beta-circleci   
-    #container_name: "mysql"
+    image: biarms/mysql:5.7-beta-circleci 
     volumes:
       - db_data_jbjuaz:/var/lib/mysql
     ports:
@@ -16,12 +15,11 @@ services:
     restart: always
 
   phpmyadmin:
-    image: phpmyadmin:latest
-    #container_name: "phpmyadmin"
+    image: phpmyadmin:latest 
     depends_on:
       - mysql
     ports:
-      - 8082:80
+      - 80:80
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=mysql
@@ -30,14 +28,16 @@ services:
     links:
       - mysql
     restart: always 
-    labels:       
-      - "traefik.enable=true"      
-      - "traefik.http.routers.phpmyadmin.rule=Host(`paineldb.stesistemas.com`) || Host(`www.paineldb.stesistemas.com`)" # Troque pelo seu Dominio
-      - "traefik.http.services.phpmyadmin.loadbalancer.server.port=3000"
-      - "traefik.http.routers.phpmyadmin.service=phpmyadmin"
-      - "traefik.http.routers.phpmyadmin.tls.certresolver=leresolver"
-      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
-      - "traefik.http.routers.phpmyadmin.tls=true"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.paineldb.rule=Host(`paineldb.stesistemas.com`) || Host(`www.paineldb.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.paineldb.entrypoints=websecure"
+      - "traefik.http.routers.paineldb.tls.certresolver=leresolver"
+      - "traefik.http.services.paineldb.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.paineldb-secure.rule=Host(`paineldb.stesistemas.com`) || Host(`www.paineldb.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.paineldb-secure.entrypoints=web"
+      - "traefik.http.routers.paineldb-secure.middlewares=redirect-to-https"
 
   node:
     depends_on:
@@ -45,25 +45,22 @@ services:
     build: ./app 
     restart: always
     env_file: ./.env  
-    #volumes:
-    #  - ./app:/app
-    #- ./certs:/app/certs
+    volumes:
+    - volime_jbjuaz:/app    
     ports:
-      - '3000:3000'
-    #- '443:443'
-    links:
-      - mysql
-    #command: bash -c /app/start.sh  
+      - '3000:3000'  
     stdin_open: true
     tty: true  
     labels:
-      - "traefik.enable=true"      
-      - "traefik.http.routers.fbjuaz.rule=Host(`fbjuaz.stesistemas.com`) || Host(`www.fbjuaz.stesistemas.com`)" # Troque pelo seu Dominio
-      - "traefik.http.services.fbjuaz.loadbalancer.server.port=3000"
-      - "traefik.http.routers.fbjuaz.service=fbjuaz"
-      - "traefik.http.routers.fbjuaz.tls.certresolver=leresolver"
+      - "traefik.enable=true"
+      - "traefik.http.routers.fbjuaz.rule=Host(`fbjuaz.stesistemas.com`) || Host(`www.fbjuaz.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
       - "traefik.http.routers.fbjuaz.entrypoints=websecure"
-      - "traefik.http.routers.fbjuaz.tls=true"     
+      - "traefik.http.routers.fbjuaz.tls.certresolver=leresolver"
+      - "traefik.http.services.fbjuaz.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.fbjuaz-secure.rule=Host(`fbjuaz.stesistemas.com`) || Host(`www.fbjuaz.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.fbjuaz-secure.entrypoints=web"
+      - "traefik.http.routers.fbjuaz-secure.middlewares=redirect-to-https"     
 
 networks:
   default:
@@ -72,4 +69,5 @@ networks:
 
 volumes:
   db_data_jbjuaz:
+  volime_jbjuaz:
 
