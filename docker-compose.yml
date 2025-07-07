@@ -46,7 +46,7 @@ services:
     restart: always
     env_file: ./.env  
     volumes:
-    - volime_jbjuaz:/app    
+      - volime_jbjuaz:/app    
     ports:
       - '3000:3000'  
     stdin_open: true
