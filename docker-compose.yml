@@ -48,7 +48,7 @@ services:
     volumes:
       - volime_jbjuaz:/app    
     ports:
-      - '5558:3000'  
+      - '3000:3000'  
     stdin_open: true
     tty: true  
     labels:
