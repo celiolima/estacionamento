@@ -4,7 +4,7 @@ services:
   mysql:
     image: biarms/mysql:5.7-beta-circleci 
     volumes:
-      - db_data_jbjuaz:/var/lib/mysql
+      - ./db_data_jbjuaz:/var/lib/mysql
     ports:
       - 3306:3306
     environment:
@@ -46,38 +46,30 @@ services:
     restart: always
     env_file: ./.env  
     volumes:
-      - volime_jbjuaz:/app    
+      - ./app:/app    
     ports:
       - '3000:3000'  
     stdin_open: true
     tty: true  
     labels:
-      # BACK
-      - 'traefik.http.routers.fbjuaz.rule=Host(`fbjuaz.stesistemas.com`) && PathPrefix(`/`)'
-      - 'traefik.http.routers.fbjuaz.service=fbjuaz'
-      - 'traefik.http.services.fbjuaz.loadbalancer.server.port=3000'
-      - 'traefik.http.routers.fbjuaz.tls=true'
-      - "traefik.http.routers.fbjuaz.entrypoints=websecure"
-      - 'traefik.http.routers.fbjuaz.tls.certresolver=leresolver'
-
-      # WebSocket
-      - 'traefik.http.routers.fbjuaz-ws.rule=Host(`fbjuaz.stesistemas.com`) && Headers(`Upgrade`, `websocket`)'
-      - 'traefik.http.routers.fbjuaz-ws.service=fbjuaz-ws'
-      - 'traefik.http.services.fbjuaz-ws.loadbalancer.server.port=3000'
-      - 'traefik.http.routers.fbjuaz-ws.tls=true'
-      - 'traefik.http.routers.fbjuaz-ws.tls.certresolver=leresolver'
-      - 'traefik.http.middlewares.websocket.headers.customrequestheaders.Upgrade=websocket'
-      - 'traefik.http.middlewares.websocket.headers.customrequestheaders.Connection=Upgrade'
-      - 'traefik.http.routers.fbjuaz-ws.middlewares=websocket'   
-      
-    
-
+      # Rota HTTP para redirecionar para HTTPS
+      - "traefik.http.routers.node-http.rule=Host(`fbjuaz.stesistemas.com`)"
+      - "traefik.http.routers.node-http.service=node-http"
+      - "traefik.http.routers.node-http.entrypoints=web"
+      - "traefik.http.routers.node-http.middlewares=https-redirect"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      # Rota HTTPS normal
+      - "traefik.enable=true"
+      - "traefik.http.routers.node-https.rule=Host(`fbjuaz.stesistemas.com`)" #Coloque o Seu Dominio do node Aqui
+      - "traefik.http.routers.node-https.service=node-https"
+      - "traefik.http.routers.node-https.entrypoints=websecure"
+      - "traefik.http.routers.node-https.tls=true"
+      - "traefik.http.routers.node-https.tls.certresolver=leresolver" 
+      - "traefik.http.services.node-https.loadbalancer.server.port=3000" 
 networks:
   default:
     name: jbjuaz
     external: true
 
-volumes:
-  db_data_jbjuaz:
-  volime_jbjuaz:
+
 

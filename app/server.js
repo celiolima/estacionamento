@@ -72,7 +72,7 @@ app.use(function (req, res, next) {
 });
 
 
-const appWs = require('./bin/app-ws');
+//const appWs = require('./bin/app-ws');
 
 /* server = app.listen(process.env.PORT_SERVER || 3000, () => {
     console.log(`SERVER corriendo en http://localhost:${process.env.PORT_SERVER}`);
@@ -82,4 +82,4 @@ server.listen(process.env.PORT_SERVER || 3000, () => {
     console.log(`SERVER corriendo en http://localhost:${process.env.PORT_SERVER}`);
 });
 
-appWs(server);
+//appWs(server);
