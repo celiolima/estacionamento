@@ -72,6 +72,6 @@ networks:
     external: true
 
 volumes:
-  db_data_jbjuaz:
-  #volume_jbjuaz:
+  #db_data_jbjuaz:
+  volume_jbjuaz:
 
