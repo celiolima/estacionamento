@@ -1,6 +1,6 @@
 const fs = require('fs');
 const http = require('http');
-const https = require('https');
+//const https = require('https');
 const express = require('express')
 const dotenv = require('dotenv')
 const path = require('path');
@@ -20,14 +20,14 @@ const { render } = require('ejs');
 const app = express()
 
 // Load SSL certificate and key
-const options = {
+/* const options = {
     key: fs.readFileSync('./certs/key.pem'),
     cert: fs.readFileSync('./certs/cert.pem')
     // ca: fs.readFileSync('/path/to/your/ca_bundle.crt') // Optional: for CA chain
-};
+}; */
 
 // Create HTTPS server
-const server = https.createServer(options, app);
+//const server = https.createServer(options, app);
 
 //seteamos el motor de plantillas
 app.set('view engine', 'ejs')
@@ -74,12 +74,12 @@ app.use(function (req, res, next) {
 
 //const appWs = require('./bin/app-ws');
 
-/* server = app.listen(process.env.PORT_SERVER || 3000, () => {
+app.listen(process.env.PORT_SERVER || 3000, () => {
     console.log(`SERVER corriendo en http://localhost:${process.env.PORT_SERVER}`);
-}) */
+})
 
-server.listen(process.env.PORT_SERVER || 3000, () => {
+/* server.listen(process.env.PORT_SERVER || 3000, () => {
     console.log(`SERVER corriendo en http://localhost:${process.env.PORT_SERVER}`);
-});
+}); */
 
 //appWs(server);
