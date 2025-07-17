@@ -4,7 +4,7 @@ services:
   mysql:
     image: biarms/mysql:5.7-beta-circleci 
     volumes:
-      - ./db_data_jbjuaz:/var/lib/mysql
+      - db_data_jbjuaz:/var/lib/mysql
     ports:
       - 3306:3306
     environment:
@@ -46,7 +46,7 @@ services:
     restart: always
     env_file: ./.env  
     volumes:
-      - ./app:/app    
+      - volume_jbjuaz:/app    
     ports:
       - '3000:3000'  
     stdin_open: true
@@ -71,5 +71,7 @@ networks:
     name: jbjuaz
     external: true
 
-
+volumes:
+  db_data_jbjuaz:
+  volume_jbjuaz:
 
