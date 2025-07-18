@@ -1,3 +1,11 @@
+const https = require('https');
+const fs = require('fs');
+
+const privateKey = fs.readFileSync('./certs/key.pem', 'utf8');
+const certificate = fs.readFileSync('./certs/cert.pem', 'utf8');
+
+const credentials = { key: privateKey, cert: certificate };
+const httpsServer = https.createServer(credentials);
 
 const WebSocket = require('ws');
 
@@ -24,7 +32,7 @@ conexion.connect((error) => {
 })
 
 
-const wss = new WebSocket.Server({ port: 3001 });
+const wss = new WebSocket.Server({ server: httpsServer });
 let sockets = [];
 wss.on('connection', ws => {
     //sockets.push(ws); 
@@ -181,7 +189,9 @@ wss.on('connection', ws => {
     ws.on('close', () => console.log('Client disconnected.'));
     ws.on('error', console.error);
 });
-
+httpsServer.listen(3001, () => {
+    console.log('Secure WebSocket server listening on port 3001');
+});
 
 
 
