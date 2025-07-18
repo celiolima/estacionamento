@@ -39,9 +39,39 @@ services:
       - "traefik.http.routers.paineldb-secure.entrypoints=web"
       - "traefik.http.routers.paineldb-secure.middlewares=redirect-to-https"
 
+  
+  wsnode:
+    depends_on:
+      - mysql
+    build: ./websockt 
+    restart: always
+    env_file: ./.env  
+    volumes:
+      - volume_wsjbjuaz:/app    
+    ports:
+      - '3001:3001'  
+    stdin_open: true
+    tty: true  
+    labels:
+      # Rota HTTP para redirecionar para HTTPS
+      - "traefik.http.routers.wsnode-http.rule=Host(`wsjuazeiro.stesistemas.com`)"
+      - "traefik.http.routers.wsnode-http.service=wsnode-http"
+      - "traefik.http.routers.wsnode-http.entrypoints=web"
+      - "traefik.http.routers.wsnode-http.middlewares=https-redirect"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      # Rota HTTPS normal
+      - "traefik.enable=true"
+      - "traefik.http.routers.wsnode-https.rule=Host(`wsjuazeiro.stesistemas.com`)" #Coloque o Seu Dominio do wsnode Aqui
+      - "traefik.http.routers.wsnode-https.service=wsnode-https"
+      - "traefik.http.routers.wsnode-https.entrypoints=websecure"
+      - "traefik.http.routers.wsnode-https.tls=true"
+      - "traefik.http.routers.wsnode-https.tls.certresolver=leresolver" 
+      - "traefik.http.services.wsnode-https.loadbalancer.server.port=3001" 
+
   node:
     depends_on:
       - mysql
+      - wsnode
     build: ./app 
     restart: always
     env_file: ./.env  
@@ -66,12 +96,14 @@ services:
       - "traefik.http.routers.node-https.tls=true"
       - "traefik.http.routers.node-https.tls.certresolver=leresolver" 
       - "traefik.http.services.node-https.loadbalancer.server.port=3000" 
+  
+    
 networks:
   default:
     name: jbjuaz
     external: true
 
 volumes:
-  #db_data_jbjuaz:
+  volume_wsjbjuaz:
   volume_jbjuaz:
 

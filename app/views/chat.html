@@ -127,13 +127,11 @@
 
 				//ws = new WebSocket('ws://192.168.1.66:3000');
 				//ws = new WebSocket('ws://ws.stesistemas.com:3000');
-				ws = new WebSocket('wss://fbjuazeiro.stesistemas.com:443');
+				ws = new WebSocket('wss://wsjuazeiro.stesistemas.com:443');
+				//ws = new WebSocket('wss://localhost:3001');
 				ws.onopen = () => {
 					console.log('Connection opened!');
-
 				}
-
-
 				//recebe do menssagem do socket
 				ws.onmessage = ({ data }) => {
 					showMessage(data);
