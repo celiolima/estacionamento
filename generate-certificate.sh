@@ -16,15 +16,15 @@ ST = SP
 L  = SaoPaulo
 O  = Dev
 OU = Dev
-CN = fbjuazeiro.stesistemas.com
+CN = wsjuazeiro.stesistemas.com
 
 [ v3_req ]
 subjectAltName = @alt_names
 
 [ alt_names ]
-DNS.1 = fbjuazeiro.stesistemas.com
-DNS.2 = www.example.com
-DNS.3 = localhost
+DNS.1 = wsjuazeiro.stesistemas.com
+DNS.2 = localhost
+
 EOF
 
 openssl req -x509 -nodes -days 365 \
