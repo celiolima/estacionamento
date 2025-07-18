@@ -49,7 +49,7 @@ services:
     volumes:
       - volume_wsjbjuaz:/app    
     ports:
-      - '3001:3001'  
+      - '9090:3001'  
     stdin_open: true
     tty: true  
     labels:
