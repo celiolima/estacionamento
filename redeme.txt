@@ -1,3 +1,7 @@
+WebSocket cat.
+npm install -g wscat
+wscat -c wss://wsjuazeiro.stesistemas.com  
+
 https://iamwilliamkoller.medium.com/como-configurar-https-com-nginx-e-node-js-do-local-ao-lets-encrypt-37ce7e96f51c
 
 Quer rodar sua API com HTTPS de forma segura, tanto localmente quanto em produção? Neste guia direto ao ponto, você vai aprender a usar Nginx como proxy reverso para uma aplicação Node.js, ativando HTTPS com certificado autoassinado em ambiente local, e com Let’s Encrypt em produção — tudo isso usando Docker.
