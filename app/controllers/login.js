@@ -1,11 +1,9 @@
 const bcryptjs = require('bcryptjs')
 const conexion = require('../database/db')
-const { promisify } = require('util')
-const { exit } = require('process')
 
 
-exports.login = async (req, res) => {
 
+exports.login = (req, res) => {
     try {
         const user = req.body.user
         const pass = req.body.pass
@@ -22,8 +20,8 @@ exports.login = async (req, res) => {
             })
         } else {
 
-            conexion.query('SELECT * FROM users WHERE user = ?', [user], async (error, results) => {
-                if (results.length == 0 || !(await bcryptjs.compare(pass, results[0].pass))) {
+            conexion.query('SELECT * FROM users WHERE user = ?', [user], (error, results) => {
+                if (results.length == 0 || !(bcryptjs.compare(pass, results[0].pass))) {
                     res.render('login', {
                         alert: true,
                         alertTitle: "Error",
