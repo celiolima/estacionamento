@@ -21,7 +21,7 @@ exports.login = (req, res) => {
         } else {
 
             conexion.query('SELECT * FROM users WHERE user = ?', [user], (error, results) => {
-                if (results.length == 0 || !(bcryptjs.compare(pass, results[0].pass))) {
+                if (!results || !(bcryptjs.compare(pass, results[0].pass))) {
                     res.render('login', {
                         alert: true,
                         alertTitle: "Error",
