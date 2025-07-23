@@ -4,21 +4,44 @@ const conexion = require('../database/db')
 
 
 exports.login = (req, res) => {
-    try {
-        const user = req.body.user
-        const pass = req.body.pass
 
-        if (!user || !pass) {
-            res.render('login', {
-                alert: true,
-                alertTitle: "Advertencia",
-                alertMessage: "Insira Usuario e Senha",
-                alertIcon: 'info',
-                showConfirmButton: true,
-                timer: false,
-                ruta: 'login'
-            })
-        } else {
+    const user = req.body.user
+    const pass = req.body.pass
+    if (!user) {
+        res.render('login', {
+            alert: true,
+            alertTitle: "Advertencia",
+            alertMessage: "Insira Usuario",
+            alertIcon: 'info',
+            showConfirmButton: true,
+            timer: false,
+            ruta: 'login'
+        })
+    } else if (!pass) {
+        res.render('login', {
+            alert: true,
+            alertTitle: "Advertencia",
+            alertMessage: "Insira Senha",
+            alertIcon: 'info',
+            showConfirmButton: true,
+            timer: false,
+            ruta: 'login'
+        })
+
+    } else if (!user && !pass) {
+        res.render('login', {
+            alert: true,
+            alertTitle: "Advertencia",
+            alertMessage: "Insira usuario e Senha",
+            alertIcon: 'info',
+            showConfirmButton: true,
+            timer: false,
+            ruta: 'login'
+        })
+
+    } else {
+
+        try {
 
             conexion.query('SELECT * FROM users WHERE user = ?', [user], (error, results) => {
                 if (!results || !(bcryptjs.compare(pass, results[0].pass))) {
@@ -55,9 +78,10 @@ exports.login = (req, res) => {
                 }
                 //conexion.destroy;
             })
+
+        } catch (error) {
+            console.log(error)
         }
-    } catch (error) {
-        console.log(error)
     }
 }
 
