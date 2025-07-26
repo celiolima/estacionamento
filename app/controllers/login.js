@@ -41,14 +41,13 @@ exports.login = (req, res) => {
 
     } else {
 
-        conexion.query('SELECT * FROM users WHERE user = "user"', function (err, results, fields) {
+        conexion.query('SELECT * FROM `users` WHERE `user` = ?', ['user'], (err, results, fields) => {
 
-            if (err) throw err;
+
             if (!results || !(bcryptjs.compare(pass, results[0].pass))) {
                 console.log("usuario INICIO: " + user + " FIM ");
                 console.log("RESULT INICIO: " + JSON.stringify(results) + " FIM ");
                 console.log("ERRO INICIO: " + JSON.stringify(results) + " FIM ");
-
                 res.render('login', {
                     alert: true,
                     alertTitle: "Error",
@@ -80,14 +79,7 @@ exports.login = (req, res) => {
                     })
                 }
             }
-            // Close the connection with a callback
-            /*  connection.end((endErr) => {
-                 if (endErr) {
-                     console.error('Error closing connection:', endErr);
-                     return;
-                 }
-                 console.log('MySQL connection closed.');
-             }); */
+            //conexion.destroy;
         })
 
     }
