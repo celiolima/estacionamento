@@ -41,50 +41,55 @@ exports.login = (req, res) => {
 
     } else {
 
-        try {
+        conexion.query("SELECT * FROM users WHERE user =" + user, (err, results, fields) => {
 
-            conexion.query('SELECT * FROM users WHERE user = ?', [user], (error, results) => {
+            if (err) throw err;
+            if (!results || !(bcryptjs.compare(pass, results[0].pass))) {
                 console.log("usuario INICIO: " + user + " FIM ");
                 console.log("RESULT INICIO: " + JSON.stringify(results) + " FIM ");
                 console.log("ERRO INICIO: " + JSON.stringify(results) + " FIM ");
-                if (!results || !(bcryptjs.compare(pass, results[0].pass))) {
+
+                res.render('login', {
+                    alert: true,
+                    alertTitle: "Error",
+                    alertMessage: "usuario ou senha incorretos",
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: false,
+                    ruta: 'login'
+                })
+            } else {
+                //inicio de sesión OK
+                //res.send('AQUI INICIO')
+                console.log("INICIO: " + JSON.stringify(results) + " FIM ")
+                const id = results[0].id
+                const userSession = results[0]
+                req.session.user = userSession
+
+                if (req.session.user) {
+                    //res.send('usuario' + req.session.useName.user + ' encontrado')                             
+
                     res.render('login', {
                         alert: true,
-                        alertTitle: "Error",
-                        alertMessage: "usuario ou senha incorretos",
-                        alertIcon: 'error',
-                        showConfirmButton: true,
-                        timer: false,
-                        ruta: 'login'
+                        alertTitle: "Conexão com Sucesso",
+                        alertMessage: "Seja Bem Vindo",
+                        alertIcon: 'success',
+                        showConfirmButton: false,
+                        timer: 800,
+                        ruta: ''
                     })
-                } else {
-                    //inicio de sesión OK
-                    //res.send('AQUI INICIO')
-                    console.log("INICIO: " + JSON.stringify(results) + " FIM ")
-                    const id = results[0].id
-                    const userSession = results[0]
-                    req.session.user = userSession
-
-                    if (req.session.user) {
-                        //res.send('usuario' + req.session.useName.user + ' encontrado')                             
-
-                        res.render('login', {
-                            alert: true,
-                            alertTitle: "Conexão com Sucesso",
-                            alertMessage: "Seja Bem Vindo",
-                            alertIcon: 'success',
-                            showConfirmButton: false,
-                            timer: 800,
-                            ruta: ''
-                        })
-                    }
                 }
-                //conexion.destroy;
-            })
+            }
+            // Close the connection with a callback
+            connection.end((endErr) => {
+                if (endErr) {
+                    console.error('Error closing connection:', endErr);
+                    return;
+                }
+                console.log('MySQL connection closed.');
+            });
+        })
 
-        } catch (error) {
-            console.log(error)
-        }
     }
 }
 
