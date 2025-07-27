@@ -41,8 +41,7 @@ exports.login = (req, res) => {
 
     } else {
 
-        conexion.query('SELECT * FROM `users` WHERE `user` = ?', ['user'], (err, results, fields) => {
-
+        conexion.query('SELECT * FROM users WHERE user = ?', [user], (err, results, fields) => {
 
             if (!results || !(bcryptjs.compare(pass, results[0].pass))) {
                 console.log("usuario INICIO: " + user + " FIM ");
