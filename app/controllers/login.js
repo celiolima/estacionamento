@@ -46,7 +46,7 @@ exports.login = (req, res) => {
             if (!results || !(bcryptjs.compare(pass, results[0].pass))) {
                 console.log("usuario INICIO: " + user + " FIM ");
                 console.log("RESULT INICIO: " + JSON.stringify(results) + " FIM ");
-                console.log("ERRO INICIO: " + JSON.stringify(results) + " FIM ");
+                console.log("ERRO INICIO: " + JSON.stringify(err) + " FIM ");
                 res.render('login', {
                     alert: true,
                     alertTitle: "Error",
