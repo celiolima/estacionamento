@@ -78,7 +78,14 @@ exports.login = (req, res) => {
                     })
                 }
             }
-            //conexion.destroy;
+            // Close the connection with a callback
+            conexion.end((endErr) => {
+                if (endErr) {
+                    console.error('Error closing connection:', endErr);
+                    return;
+                }
+                console.log('MySQL connection closed.');
+            });
         })
 
     }
