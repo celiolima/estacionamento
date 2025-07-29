@@ -64,7 +64,7 @@ wss.on('connection', ws => {
             //console.log('data:',created_at.to)
             let pafhImage = 'uploads/car/car' + created_at + '.jpg';
             //let pafhImage = dirImage.toString
-            let uploadsPath = path.resolve(__dirname, `../public/${pafhImage}`);
+            let uploadsPath = path.resolve(__dirname, `./public/${pafhImage}`);
 
             //#################-enviando foto para pasta local-###################//                
             fs.writeFileSync(uploadsPath, bitmap, 'binary', function (err) {
@@ -78,9 +78,11 @@ wss.on('connection', ws => {
             console.log('Conferindo CurrentCam =', currentCam);
             let type = '';
             if (currentCam == '1') {
-                type = 'Entrada '
+                type = 'Entrada ';
+                console.log('Entrada');
             } else if (currentCam == '2') {
-                type = 'Saida '
+                type = 'Saida ';
+                console.log('Saida');
             }
             let name = type + 'car' + created_at;
             let parfirImage = pafhImage;
