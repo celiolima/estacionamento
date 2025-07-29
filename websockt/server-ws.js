@@ -1,6 +1,7 @@
 
 const WebSocket = require('ws');
 const path = require('path');
+const fs = require('fs');
 
 //usando conexão com o DB
 //const conexion = require('../database/db');
