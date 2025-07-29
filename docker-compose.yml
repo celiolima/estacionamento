@@ -77,7 +77,8 @@ services:
     restart: always
     env_file: ./.env  
     volumes:
-      - volume_jbjuaz:/app    
+      - volume_jbjuaz:/app
+      - volume_wsjbjuaz_fotos:/app/public/uploads/car     
     ports:
       - '3000:3000'  
     stdin_open: true
