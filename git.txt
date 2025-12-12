@@ -1,0 +1,19 @@
+Comece criando um novo arquivo ou enviando um arquivo existente .
+Recomendamos que todos os repositórios incluam um arquivo README , 
+um arquivo LICENSE e um arquivo .gitignore	
+https://github.com/celiolima/estacionamento.git
+
+
+…ou crie um novo repositório na linha de comando.
+echo "# estacionamento" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/celiolima/estacionamento.git
+git push -u origin main
+
+…ou enviar um repositório existente a partir da linha de comando.
+git remote add origin https://github.com/celiolima/estacionamento.git
+git branch -M main
+git push -u origin main
