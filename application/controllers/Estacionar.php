@@ -1,10 +1,12 @@
 <?php
 
-defined('BASEPATH') OR exit('Ação não permitida');
+defined('BASEPATH') or exit('Ação não permitida');
 
-class Estacionar extends CI_Controller {
+class Estacionar extends CI_Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         if (!$this->ion_auth->logged_in()) {
@@ -13,10 +15,10 @@ class Estacionar extends CI_Controller {
         }
 
 
-//        if (!$this->ion_auth->is_admin()) {
-//            $this->session->set_flashdata('info', 'Você não tem permissão para acessar esse menu');
-//            redirect('home');
-//        }
+        //        if (!$this->ion_auth->is_admin()) {
+        //            $this->session->set_flashdata('info', 'Você não tem permissão para acessar esse menu');
+        //            redirect('home');
+        //        }
 
         $this->load->model('core_model');
         $this->load->model('estacionar_model');
@@ -24,12 +26,13 @@ class Estacionar extends CI_Controller {
         date_default_timezone_set('America/Sao_Paulo');
     }
 
-    public function index() {
+    public function index()
+    {
 
-//        if (!$this->ion_auth->is_admin()) {
-//            $this->session->set_flashdata('info', 'Você não tem permissão para acessar esse menu');
-//            redirect('home');
-//        }
+        //        if (!$this->ion_auth->is_admin()) {
+        //            $this->session->set_flashdata('info', 'Você não tem permissão para acessar esse menu');
+        //            redirect('home');
+        //        }
 
         $data = array(
             'titulo' => 'Listando todas as ordens de estacionamento',
@@ -67,7 +70,8 @@ class Estacionar extends CI_Controller {
         $this->load->view('layout/footer');
     }
 
-    public function modulo($estacionar_id = NULL) {
+    public function modulo($estacionar_id = NULL)
+    {
 
         if (!$estacionar_id) {
 
@@ -84,13 +88,14 @@ class Estacionar extends CI_Controller {
 
 
                 $data = elements(
-                        array(
-                    'estacionar_valor_hora',
-                    'estacionar_numero_vaga',
-                    'estacionar_placa_veiculo',
-                    'estacionar_marca_veiculo',
-                    'estacionar_modelo_veiculo',
-                        ), $this->input->post()
+                    array(
+                        'estacionar_valor_hora',
+                        'estacionar_numero_vaga',
+                        'estacionar_placa_veiculo',
+                        'estacionar_marca_veiculo',
+                        'estacionar_modelo_veiculo',
+                    ),
+                    $this->input->post()
                 );
 
                 $data['estacionar_precificacao_id'] = intval(substr($this->input->post('estacionar_precificacao_id'), 0, 1));
@@ -149,11 +154,12 @@ class Estacionar extends CI_Controller {
                 if ($this->form_validation->run()) {
 
                     $data = elements(
-                            array(
-                        'estacionar_valor_devido',
-                        'estacionar_forma_pagamento_id',
-                        'estacionar_tempo_decorrido',
-                            ), $this->input->post()
+                        array(
+                            'estacionar_valor_devido',
+                            'estacionar_forma_pagamento_id',
+                            'estacionar_tempo_decorrido',
+                        ),
+                        $this->input->post()
                     );
 
 
@@ -196,7 +202,8 @@ class Estacionar extends CI_Controller {
         }
     }
 
-    public function check_range_vagas_categoria($numero_vaga) {
+    public function check_range_vagas_categoria($numero_vaga)
+    {
 
         $precificacao_id = intval(substr($this->input->post('estacionar_precificacao_id'), 0, 1));
 
@@ -219,7 +226,8 @@ class Estacionar extends CI_Controller {
         }
     }
 
-    public function check_vaga_ocupada($estacionar_numero_vaga) {
+    public function check_vaga_ocupada($estacionar_numero_vaga)
+    {
 
         $estacionar_precificacao_id = intval(substr($this->input->post('estacionar_precificacao_id'), 0, 1));
 
@@ -234,7 +242,8 @@ class Estacionar extends CI_Controller {
         }
     }
 
-    public function check_placa_status_aberta($estacionar_placa_veiculo) {
+    public function check_placa_status_aberta($estacionar_placa_veiculo)
+    {
 
         $estacionar_placa_veiculo = strtoupper($estacionar_placa_veiculo);
 
@@ -249,7 +258,8 @@ class Estacionar extends CI_Controller {
         }
     }
 
-    public function del($estacionar_id = NULL) {
+    public function del($estacionar_id = NULL)
+    {
 
         if (!$this->ion_auth->is_admin()) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir registros');
@@ -274,7 +284,8 @@ class Estacionar extends CI_Controller {
         }
     }
 
-    public function imprimir($estacionar_id = NULL) {
+    public function imprimir($estacionar_id = NULL)
+    {
 
         if (!$estacionar_id || !$this->core_model->get_by_id('estacionar', array('estacionar_id' => $estacionar_id))) {
             $this->session->set_flashdata('error', 'Ordem não encontrada');
@@ -295,7 +306,8 @@ class Estacionar extends CI_Controller {
         }
     }
 
-    public function pdf($estacionar_id = NULL) {
+    public function pdf($estacionar_id = NULL)
+    {
 
 
         if (!$estacionar_id || !$this->core_model->get_by_id('estacionar', array('estacionar_id' => $estacionar_id))) {
@@ -308,10 +320,10 @@ class Estacionar extends CI_Controller {
             $empresa = $this->core_model->get_by_id('sistema', array('sistema_id' => 1));
 
             $ordem = $this->estacionar_model->get_by_id($estacionar_id);
-//            
-//            echo '<pre>';
-//            print_r($ordem_servico);
-//            exit();
+            //            
+            //            echo '<pre>';
+            //            print_r($ordem_servico);
+            //            exit();
 
             $file_name = 'Ordem - Placa_' . $ordem->estacionar_placa_veiculo;
 
@@ -343,23 +355,23 @@ class Estacionar extends CI_Controller {
 
             if ($ordem->estacionar_status == 1) {
                 $dados_saida .= '<strong>Data saída:</strong> ' . formata_data_banco_com_hora($ordem->estacionar_data_saida) . '<br/>'
-                        . '<strong>Tempo decorrido (hh:mm):</strong> ' . $ordem->estacionar_tempo_decorrido . '<br/>'
-                        . '<strong>Valor pago:</strong> ' . 'R$&nbsp;' . $ordem->estacionar_valor_devido . '<br/>'
-                        . '<strong>Forma de pagamento:</strong> ' . $ordem->forma_pagamento . '<br/>';
+                    . '<strong>Tempo decorrido (hh:mm):</strong> ' . $ordem->estacionar_tempo_decorrido . '<br/>'
+                    . '<strong>Valor pago:</strong> ' . 'R$&nbsp;' . $ordem->estacionar_valor_devido . '<br/>'
+                    . '<strong>Forma de pagamento:</strong> ' . $ordem->forma_pagamento . '<br/>';
             }
 
 
             /* Dados da ordem */
             $html .= '<p align = "right">Ordem N°: ' . $ordem->estacionar_id . '</p><br/>';
             $html .= '<p>'
-                    . '<strong>Placa veículo:</strong> ' . $ordem->estacionar_placa_veiculo . '<br/>'
-                    . '<strong>Marca veículo:</strong> ' . $ordem->estacionar_marca_veiculo . '<br/>'
-                    . '<strong>Modelo veículo:</strong> ' . $ordem->estacionar_modelo_veiculo . '<br/>'
-                    . '<strong>Categoria veículo:</strong> ' . $ordem->veiculo_categoria . '<br/>'
-                    . '<strong>Numero da vaga:</strong> ' . $ordem->estacionar_numero_vaga . '<br/>'
-                    . '<strong>Data entrada:</strong> ' . formata_data_banco_com_hora($ordem->estacionar_data_entrada) . '<br/>'
-                    . $dados_saida
-                    . '</p>';
+                . '<strong>Placa veículo:</strong> ' . $ordem->estacionar_placa_veiculo . '<br/>'
+                . '<strong>Marca veículo:</strong> ' . $ordem->estacionar_marca_veiculo . '<br/>'
+                . '<strong>Modelo veículo:</strong> ' . $ordem->estacionar_modelo_veiculo . '<br/>'
+                . '<strong>Categoria veículo:</strong> ' . $ordem->veiculo_categoria . '<br/>'
+                . '<strong>Numero da vaga:</strong> ' . $ordem->estacionar_numero_vaga . '<br/>'
+                . '<strong>Data entrada:</strong> ' . formata_data_banco_com_hora($ordem->estacionar_data_entrada) . '<br/>'
+                . $dados_saida
+                . '</p>';
 
             $html .= "<br>";
 
@@ -378,12 +390,11 @@ class Estacionar extends CI_Controller {
             /* False => abre no navegador; */
             /* True => Faz o download; */
 
-//            echo '<pre>';
-//            print_r($html);
-//            exit();
+            //            echo '<pre>';
+            //            print_r($html);
+            //            exit();
 
             $this->pdf->createPDF($html, $file_name, false);
         }
     }
-
 }

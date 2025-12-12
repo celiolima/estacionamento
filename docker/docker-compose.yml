@@ -1,4 +1,4 @@
-version: '2'
+
 services:
     nginx:
         image: nginx:alpine
@@ -31,7 +31,8 @@ services:
             - "traefik.http.routers.nginx-https.tls=true"
             - "traefik.http.routers.nginx-https.tls.certresolver=leresolver" 
             - "traefik.http.services.nginx-https.loadbalancer.server.port=${NGINX_PORT}" 
-
+        networks:
+            - jbjuaz
     php-fpm:
         container_name: php-fpm
         build:
@@ -41,6 +42,8 @@ services:
         volumes:
             - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
             - "../:/var/www/html"
+        networks:
+            - jbjuaz
 
     composer:
         container_name: composer
@@ -50,6 +53,8 @@ services:
         volumes:
             - "../:/app"
         command: install
+        networks:
+            - jbjuaz
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
@@ -74,7 +79,8 @@ services:
             - "traefik.http.routers.phpmyadmin-secure.rule=Host(`fbjuazeioroadmin.stesistemas.com`) || Host(`www.fbjuazeioromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.phpmyadmin-secure.entrypoints=web"
             - "traefik.http.routers.phpmyadmin-secure.middlewares=redirect-to-https"
-
+        networks:
+            - jbjuaz
 
     mysql:
         image: mysql:${MYSQL_MAPOS_VERSION}
@@ -91,10 +97,11 @@ services:
             - "${MYSQL_MAPOS_PORT}:3306"
         volumes:
             - "./data/db/mysql:/var/lib/mysql"
+        networks:
+            - jbjuaz
 
-    networks:
-        default:
-            name: jbjuaz
-            external: true
+networks:
+    jbjuaz:
+        driver: bridge
     
     
