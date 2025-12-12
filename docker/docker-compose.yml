@@ -18,14 +18,14 @@ services:
             - mysql
         labels:
             # Rota HTTP para redirecionar para HTTPS
-            - "traefik.http.routers.nginx-http.rule=Host(`fbjuaz.stesistemas.com`)"
+            - "traefik.http.routers.nginx-http.rule=Host(`fbjuazeioro.stesistemas.com`)"
             - "traefik.http.routers.nginx-http.service=nginx-http"
             - "traefik.http.routers.nginx-http.entrypoints=web"
             - "traefik.http.routers.nginx-http.middlewares=https-redirect"
             - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
             # Rota HTTPS normal
             - "traefik.enable=true"
-            - "traefik.http.routers.nginx-https.rule=Host(`fbjuaz.stesistemas.com`)" #Coloque o Seu Dominio do nginx Aqui
+            - "traefik.http.routers.nginx-https.rule=Host(`fbjuazeioro.stesistemas.com`)" #Coloque o Seu Dominio do nginx Aqui
             - "traefik.http.routers.nginx-https.service=nginx-https"
             - "traefik.http.routers.nginx-https.entrypoints=websecure"
             - "traefik.http.routers.nginx-https.tls=true"
@@ -66,12 +66,12 @@ services:
             - mysql
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.stesistemas.com`) || Host(`www.phpmyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.phpmyadmin.rule=Host(`fbjuazeioromyadmin.stesistemas.com`) || Host(`www.fbjuazeioromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
             - "traefik.http.routers.phpmyadmin.tls.certresolver=leresolver"
-            - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
+            - "traefik.http.services.phpmyadmin.loadbalancer.server.port=${PHP_MY_ADMIN_PORT}"
             - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-            - "traefik.http.routers.phpmyadmin-secure.rule=Host(`phpmyadmin.stesistemas.com`) || Host(`www.phpmyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.phpmyadmin-secure.rule=Host(`fbjuazeioroadmin.stesistemas.com`) || Host(`www.fbjuazeioromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.phpmyadmin-secure.entrypoints=web"
             - "traefik.http.routers.phpmyadmin-secure.middlewares=redirect-to-https"
 
