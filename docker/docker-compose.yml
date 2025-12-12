@@ -91,5 +91,10 @@ services:
             - "${MYSQL_MAPOS_PORT}:3306"
         volumes:
             - "./data/db/mysql:/var/lib/mysql"
+
+    networks:
+        default:
+            name: jbjuaz
+            external: true
     
     
