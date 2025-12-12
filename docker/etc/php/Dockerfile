@@ -17,6 +17,8 @@ RUN docker-php-ext-install mysqli pdo_mysql mbstring exif gd zip
 # Permission for PHP to write in volumes
 RUN usermod -u 1000 www-data
 
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 # Install supervisor and cron
 RUN apt-get update && apt-get install supervisor cron -y
 

@@ -45,16 +45,16 @@ services:
         networks:
             - jbjuaz
 
-    composer:
-        container_name: composer
-        build:
-            context: ./etc/composer
-            dockerfile: Dockerfile
-        volumes:
-            - "../:/app"
-        command: install
-        networks:
-            - jbjuaz
+    #composer:
+    #    container_name: composer
+    #    build:
+    #        context: ./etc/composer
+    #        dockerfile: Dockerfile
+    #    volumes:
+    #        - "../:/app"
+    #    command: install
+    #    networks:
+    #        - jbjuaz
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
