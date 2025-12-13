@@ -29,8 +29,7 @@ services:
             - "traefik.http.routers.nginx-secure.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.nginx-secure.entrypoints=web"
             - "traefik.http.routers.nginx-secure.middlewares=redirect-to-https"
-        networks:
-            - jbjuaz
+       
     php-fpm:
         container_name: php-fpm
         build:
@@ -40,8 +39,7 @@ services:
         volumes:
             - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
             - "../:/var/www/html"
-        networks:
-            - jbjuaz
+       
 
     #composer:
     #    container_name: composer
@@ -78,8 +76,7 @@ services:
             - "traefik.http.routers.phpmyadmin-secure.rule=Host(`fbjuazeiromyadmin.stesistemas.com`) || Host(`www.fbjuazeiromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.phpmyadmin-secure.entrypoints=web"
             - "traefik.http.routers.phpmyadmin-secure.middlewares=redirect-to-https"
-        networks:
-            - jbjuaz
+        
 
     mysql:
         image: mysql:${MYSQL_MAPOS_VERSION}
@@ -96,8 +93,7 @@ services:
             - "${MYSQL_MAPOS_PORT}:3306"
         volumes:
             - "./data/db/mysql:/var/lib/mysql"
-        networks:
-            - jbjuaz
+       
 
 networks:
   default:
