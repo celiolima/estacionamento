@@ -100,7 +100,8 @@ services:
             - jbjuaz
 
 networks:
-    jbjuaz:
-        driver: bridge
+  default:
+    name: jbjuaz
+    external: true
     
     
