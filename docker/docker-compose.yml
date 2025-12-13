@@ -25,20 +25,20 @@ services:
             - "traefik.enable=true"
             
             # Define the router name and entrypoint (websecure for HTTPS)
-            - "traefik.http.routers.php-app.entrypoints=websecure"
+            - "traefik.http.routers.nginx.entrypoints=websecure"
             
             # Define the routing rule based on the Host header
-            # Replace 'your-php-app.example.com' with your actual domain
-            - "traefik.http.routers.php-app.rule=Host(`fbjuazeiro.stesistemas.com`)"
+            # Replace 'your-nginx.example.com' with your actual domain
+            - "traefik.http.routers.nginx.rule=Host(`fbjuazeiro.stesistemas.com`)"
             
             # Enable TLS (HTTPS) with a certificate resolver (e.g., 'le' for Let's Encrypt)
             # You must configure the resolver in your main Traefik static config
-            - "traefik.http.routers.php-app.tls=true"
-            - "traefik.http.routers.php-app.tls.certresolver=leresolver" # e.g., 'le'
+            - "traefik.http.routers.nginx.tls=true"
+            - "traefik.http.routers.nginx.tls.certresolver=leresolver" # e.g., 'le'
 
             # Define the service and the port where the PHP container is listening
             # The webdevops image uses port 80 for Nginx/PHP-FPM communication
-            - "traefik.http.services.php-app.loadbalancer.server.port=80"
+            - "traefik.http.services.nginx.loadbalancer.server.port=80"
 
       
             ## Rota HTTP para redirecionar para HTTPS
@@ -98,20 +98,20 @@ services:
             - "traefik.enable=true"
             
             # Define the router name and entrypoint (websecure for HTTPS)
-            - "traefik.http.routers.php-app.entrypoints=websecure"
+            - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
             
             # Define the routing rule based on the Host header
-            # Replace 'your-php-app.example.com' with your actual domain
-            - "traefik.http.routers.php-app.rule=Host(`fbjuazeiromyadmin.stesistemas.com`)"
+            # Replace 'your-phpmyadmin.example.com' with your actual domain
+            - "traefik.http.routers.phpmyadmin.rule=Host(`fbjuazeiromyadmin.stesistemas.com`)"
             
             # Enable TLS (HTTPS) with a certificate resolver (e.g., 'le' for Let's Encrypt)
             # You must configure the resolver in your main Traefik static config
-            - "traefik.http.routers.php-app.tls=true"
-            - "traefik.http.routers.php-app.tls.certresolver=leresolver" # e.g., 'le'
+            - "traefik.http.routers.phpmyadmin.tls=true"
+            - "traefik.http.routers.phpmyadmin.tls.certresolver=leresolver" # e.g., 'le'
 
             # Define the service and the port where the PHP container is listening
             # The webdevops image uses port 80 for Nginx/PHP-FPM communication
-            - "traefik.http.services.php-app.loadbalancer.server.port=80"
+            - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
             #- "traefik.enable=true"
             #- "traefik.http.routers.phpmyadmin.rule=Host(`fbjuazeiromyadmin.stesistemas.com`) || Host(`www.fbjuazeiromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             #- "traefik.http.routers.phpmyadmin.entrypoints=websecure"
