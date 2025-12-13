@@ -11,50 +11,24 @@ services:
             - "../:/var/www/html"
             #- "./etc/nginx/default.template.conf:/etc/nginx/conf.d/default.template"
         ports:
-            - "${NGINX_PORT}:80"
+            #- "${NGINX_PORT}:80"
+            - 9080:80
         env_file:
             - ".env"
-        #command: /bin/sh -c "envsubst '$$NGINX_HOST $$NGINX_PORT' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
         restart: always
         depends_on:
             - php-fpm
             - mysql
         labels:
-
-            # Enable Traefik for this service
             - "traefik.enable=true"
-            
-            # Define the router name and entrypoint (websecure for HTTPS)
+            - "traefik.http.routers.nginx.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.nginx.entrypoints=websecure"
-            
-            # Define the routing rule based on the Host header
-            # Replace 'your-nginx.example.com' with your actual domain
-            - "traefik.http.routers.nginx.rule=Host(`fbjuazeiro.stesistemas.com`)"
-            
-            # Enable TLS (HTTPS) with a certificate resolver (e.g., 'le' for Let's Encrypt)
-            # You must configure the resolver in your main Traefik static config
-            - "traefik.http.routers.nginx.tls=true"
-            - "traefik.http.routers.nginx.tls.certresolver=leresolver" # e.g., 'le'
-
-            # Define the service and the port where the PHP container is listening
-            # The webdevops image uses port 80 for Nginx/PHP-FPM communication
+            - "traefik.http.routers.nginx.tls.certresolver=leresolver"
             - "traefik.http.services.nginx.loadbalancer.server.port=80"
-
-      
-            ## Rota HTTP para redirecionar para HTTPS
-            #- "traefik.http.routers.nginx-http.rule=Host(`fbjuazeiro.stesistemas.com`)"
-            #- "traefik.http.routers.nginx-http.service=nginx-http"
-            #- "traefik.http.routers.nginx-http.entrypoints=web"
-            #- "traefik.http.routers.nginx-http.middlewares=https-redirect"
-            #- "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-            ## Rota HTTPS normal
-            #- "traefik.enable=true"
-            #- "traefik.http.routers.nginx-https.rule=Host(`fbjuazeiro.stesistemas.com`)" #Coloque o Seu Dominio do nginx Aqui
-            #- "traefik.http.routers.nginx-https.service=nginx-https"
-            #- "traefik.http.routers.nginx-https.entrypoints=websecure"
-            #- "traefik.http.routers.nginx-https.tls=true"
-            #- "traefik.http.routers.nginx-https.tls.certresolver=leresolver" 
-            #- "traefik.http.services.nginx-https.loadbalancer.server.port=80" 
+            - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+            - "traefik.http.routers.nginx-secure.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.nginx-secure.entrypoints=web"
+            - "traefik.http.routers.nginx-secure.middlewares=redirect-to-https"
         networks:
             - jbjuaz
     php-fpm:
@@ -84,7 +58,8 @@ services:
         image: phpmyadmin/phpmyadmin
         container_name: phpmyadmin
         ports:
-            - "${PHP_MY_ADMIN_PORT}:80"
+            #- "${PHP_MY_ADMIN_PORT}:80"
+            - 9081:80
         environment:
             - PMA_ARBITRARY=1
             - PMA_HOST=${MYSQL_MAPOS_HOST}
@@ -94,33 +69,15 @@ services:
         depends_on:
             - mysql
         labels:
-             # Enable Traefik for this service
             - "traefik.enable=true"
-            
-            # Define the router name and entrypoint (websecure for HTTPS)
+            - "traefik.http.routers.phpmyadmin.rule=Host(`fbjuazeiromyadmin.stesistemas.com`) || Host(`www.fbjuazeiromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
-            
-            # Define the routing rule based on the Host header
-            # Replace 'your-phpmyadmin.example.com' with your actual domain
-            - "traefik.http.routers.phpmyadmin.rule=Host(`fbjuazeiromyadmin.stesistemas.com`)"
-            
-            # Enable TLS (HTTPS) with a certificate resolver (e.g., 'le' for Let's Encrypt)
-            # You must configure the resolver in your main Traefik static config
-            - "traefik.http.routers.phpmyadmin.tls=true"
-            - "traefik.http.routers.phpmyadmin.tls.certresolver=leresolver" # e.g., 'le'
-
-            # Define the service and the port where the PHP container is listening
-            # The webdevops image uses port 80 for Nginx/PHP-FPM communication
+            - "traefik.http.routers.phpmyadmin.tls.certresolver=leresolver"
             - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
-            #- "traefik.enable=true"
-            #- "traefik.http.routers.phpmyadmin.rule=Host(`fbjuazeiromyadmin.stesistemas.com`) || Host(`www.fbjuazeiromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
-            #- "traefik.http.routers.phpmyadmin.entrypoints=websecure"
-            #- "traefik.http.routers.phpmyadmin.tls.certresolver=leresolver"
-            #- "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
-            #- "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-            #- "traefik.http.routers.phpmyadmin-secure.rule=Host(`fbjuazeiromyadmin.stesistemas.com`) || Host(`www.fbjuazeiromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
-            #- "traefik.http.routers.phpmyadmin-secure.entrypoints=web"
-            #- "traefik.http.routers.phpmyadmin-secure.middlewares=redirect-to-https"
+            - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+            - "traefik.http.routers.phpmyadmin-secure.rule=Host(`fbjuazeiromyadmin.stesistemas.com`) || Host(`www.fbjuazeiromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.phpmyadmin-secure.entrypoints=web"
+            - "traefik.http.routers.phpmyadmin-secure.middlewares=redirect-to-https"
         networks:
             - jbjuaz
 
