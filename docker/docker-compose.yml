@@ -11,7 +11,7 @@ services:
             - "../:/var/www/html"
             #- "./etc/nginx/default.template.conf:/etc/nginx/conf.d/default.template"
         ports:
-            - "${NGINX_PORT}:${NGINX_PORT}"
+            - "${NGINX_PORT}:80"
         env_file:
             - ".env"
         #command: /bin/sh -c "envsubst '$$NGINX_HOST $$NGINX_PORT' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
@@ -79,7 +79,7 @@ services:
             - "traefik.http.routers.phpmyadmin.tls.certresolver=leresolver"
             - "traefik.http.services.phpmyadmin.loadbalancer.server.port=${PHP_MY_ADMIN_PORT}"
             - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-            - "traefik.http.routers.phpmyadmin-secure.rule=Host(`fbjuazeioroadmin.stesistemas.com`) || Host(`www.fbjuazeioromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.phpmyadmin-secure.rule=Host(`fbjuazeioromyadmin.stesistemas.com`) || Host(`www.fbjuazeioromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.phpmyadmin-secure.entrypoints=web"
             - "traefik.http.routers.phpmyadmin-secure.middlewares=redirect-to-https"
         networks:
