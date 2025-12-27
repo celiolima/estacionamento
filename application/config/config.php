@@ -27,7 +27,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 //$config['base_url'] = 'http://localhost/estacionamento/';
 //$config['base_url'] = 'https://parknowsystem.000webhostapp.com/';
-$config['base_url'] = 'http://localhost:8000/';
+//$config['base_url'] = 'http://localhost:9090/';
+$config['base_url'] = 'https://fbjuazeiro.stesistemas.com/';
 
 /*
   |--------------------------------------------------------------------------
