@@ -21,12 +21,14 @@ services:
             - mysql
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.nginx.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            #- "traefik.http.routers.nginx.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.nginx.rule=Host(`fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.nginx.entrypoints=websecure"
             - "traefik.http.routers.nginx.tls.certresolver=le"
             - "traefik.http.services.nginx.loadbalancer.server.port=80"
             - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-            - "traefik.http.routers.nginx-secure.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            #- "traefik.http.routers.nginx-secure.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.nginx-secure.rule=Host(`fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.nginx-secure.entrypoints=web"
             - "traefik.http.routers.nginx-secure.middlewares=redirect-to-https"
        
