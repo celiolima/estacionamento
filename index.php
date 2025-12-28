@@ -36,6 +36,10 @@
  * @since	Version 1.0.0
  * @filesource
  */
+echo "</pre>";
+        print_r("  voçê esta na home");
+        echo "</pre>";
+        exit;
 
 /*
  *---------------------------------------------------------------
