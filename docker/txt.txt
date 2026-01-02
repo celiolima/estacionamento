@@ -1,0 +1,46 @@
+docker-compose up -d
+
+docker ps -a
+docker logs -f [id]
+docker images
+docker image prune -a
+
+docker volume create meu_volume	      Cria um novo volume.
+docker volume ls
+docker volume inspect meu_volume
+docker volume prune
+
+docker network create minha-rede-bridge
+docker network ls
+docker network inspect minha-rede-bridge
+docker network rm minha-rede-bridge
+
+docker system prune
+
+1. O Método "Tudo em Um"
+
+    Se você quer parar e remover todos os containers (incluindo os que ainda estão rodando) com um único comando:
+    docker rm -f $(docker ps -aq)
+
+    # Verifique certificados
+    docker exec traefik cat /acme/acme.json | jq .
+
+    Verificações:
+    bash
+    # Verifique os logs
+    docker-compose logs -f portainer-ce
+
+    # Verifique certificados
+    docker exec traefik ls -la /acme/
+
+    # Teste o acesso
+    curl -I https://portainer.seu-dominio.com
+
+    # Verifique health check
+    docker-compose ps
+
+2.Para remover completamente:
+
+    bash
+    docker-compose down -v
+    docker volume rm portainer_data

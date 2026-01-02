@@ -1,0 +1,91 @@
+
+services:
+  # Servidor Web com PHP 7.4
+  web:
+    #image: php:7.4-apache
+    container_name: codeigniter_web
+    build:      
+      context: ./docker/php
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/apache/apache.conf:/etc/apache2/sites-available/000-default.conf
+    depends_on:
+      - mysql
+    labels:
+            - "traefik.enable=true"
+            #- "traefik.http.routers.web.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.web.rule=Host(`fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.web.entrypoints=websecure"
+            - "traefik.http.routers.web.tls.certresolver=le"
+            - "traefik.http.services.web.loadbalancer.server.port=80"
+            - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+            #- "traefik.http.routers.web-secure.rule=Host(`fbjuazeiro.stesistemas.com`) || Host(`www.fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.web-secure.rule=Host(`fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.web-secure.entrypoints=web"
+            - "traefik.http.routers.web-secure.middlewares=redirect-to-https"
+    #networks:
+    #  - estacionamento
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/html
+
+  # Banco de dados MySQL
+  mysql:
+    image: mysql:5.7
+    container_name: codeigniter_mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: estacionamento_mysql
+      MYSQL_USER: user
+      MYSQL_PASSWORD: root
+    #networks:
+    #  - estacionamento
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: codeigniter_phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: user
+      PMA_PASSWORD: root
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      UPLOAD_LIMIT: 128M
+    depends_on:
+      - mysql
+    labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.phpmyadmin.rule=Host(`fbjuazeiromyadmin.stesistemas.com`) || Host(`www.fbjuazeiromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
+            - "traefik.http.routers.phpmyadmin.tls.certresolver=le"
+            - "traefik.http.services.phpmyadmin.loamysqlalancer.server.port=80"
+            - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+            - "traefik.http.routers.phpmyadmin-secure.rule=Host(`fbjuazeiromyadmin.stesistemas.com`) || Host(`www.fbjuazeiromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.phpmyadmin-secure.entrypoints=web"
+            - "traefik.http.routers.phpmyadmin-secure.middlewares=redirect-to-https"
+    #networks:
+    #  - estacionamento
+
+networks:
+  default:
+    name: estacionamento
+    external: true
+
+volumes:
+  mysql_data:
+    driver: local
+   
