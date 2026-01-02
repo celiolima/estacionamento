@@ -12,8 +12,8 @@ services:
       - "8080:80"
     volumes:
       - ./:/var/www/html
-      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
-      - ./docker/apache/apache.conf:/etc/apache2/sites-available/000-default.conf
+      - ./docker/php/:/usr/local/etc/php/php.ini
+      - ./docker/apache/:/etc/apache2/sites-available/000-default.conf
     depends_on:
       - mysql
     labels:
