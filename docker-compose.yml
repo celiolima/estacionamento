@@ -72,7 +72,7 @@ services:
             - "traefik.http.routers.phpmyadmin.rule=Host(`fbjuazeiromyadmin.stesistemas.com`) || Host(`www.fbjuazeiromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
             - "traefik.http.routers.phpmyadmin.tls.certresolver=le"
-            - "traefik.http.services.phpmyadmin.loamysqlalancer.server.port=80"
+            - "traefik.http.services.phpmyadmin.loamysqlalancer.server.port=8081"
             - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
             - "traefik.http.routers.phpmyadmin-secure.rule=Host(`fbjuazeiromyadmin.stesistemas.com`) || Host(`www.fbjuazeiromyadmin.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
             - "traefik.http.routers.phpmyadmin-secure.entrypoints=web"
