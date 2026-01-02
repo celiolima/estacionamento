@@ -13,7 +13,7 @@ services:
     volumes:
       - ./:/var/www/html
       - ./docker/php/:/usr/local/etc/php/php.ini
-      - ./docker/apache/:/etc/apache2/sites-available/000-default.conf
+      - ./docker/apache/:/etc/apache2/sites-available/000-default.conf:ro
     depends_on:
       - mysql
     labels:
