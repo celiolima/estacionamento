@@ -9,19 +9,12 @@ services:
       dockerfile: Dockerfile
     restart: always
     #ports:
-    #  - "8080:80"
-    working_dir: /var/www/html
-    environment:
-      - APACHE_CONF_PATH=/docker/apache/000-default.conf
-      - PHP_INI_PATH=/docker/php/php.ini
-      - ROOT_PATH=/app
+    #  - "8080:80"    
     volumes:  
-      - "${APACHE_CONF_PATH}:/usr/local/etc/php/php.ini"
-      - "${PHP_INI_PATH}:/etc/apache2/sites-available/000-default.conf"
-      - "${ROOT_PATH}:/var/www/html"
+      - ./app:/var/www/html
       # Logs
-      - "./logs/apache:/var/log/apache2"
-      - "./logs/php:/var/log/php"
+      - ./logs/apache:/var/log/apache2
+      - ./logs/php:/var/log/php
     depends_on:
       - mysql
     labels:
