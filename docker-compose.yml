@@ -115,8 +115,7 @@ services:
       - estacionamento
 
 networks:
-  default:
-    name: estacionamento
+  estacionamento:   
     external: true
 
 volumes:
