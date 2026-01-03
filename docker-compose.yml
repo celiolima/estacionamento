@@ -1,9 +1,9 @@
 
 services:
   # Servidor Web com PHP 7.4
-  web:
+  app:
     image: php:7.4-apache
-    container_name: codeigniter_web
+    container_name: codeigniter_app
     # Comandos para instalar extensões PHP necessárias
     command: >
       sh -c "
@@ -54,11 +54,11 @@ services:
       - mysql
     labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.web.rule=Host(`fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
-            - "traefik.http.routers.web.entrypoints=websecure"
+            - "traefik.http.routers.app.rule=Host(`fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+            - "traefik.http.routers.app.entrypoints=websecure"
             - "traefik.http.routers.app.tls=true"
-            - "traefik.http.routers.web.tls.certresolver=le"
-            - "traefik.http.services.web.loadbalancer.server.port=80"
+            - "traefik.http.routers.app.tls.certresolver=le"
+            - "traefik.http.services.app.loadbalancer.server.port=80"
             # Middleware de segurança
             - "traefik.http.routers.app.middlewares=security-headers"
             # Health check
