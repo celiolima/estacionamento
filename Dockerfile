@@ -12,7 +12,7 @@ RUN a2enmod rewrite
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 
 # (Opcional) VirtualHost customizado
-COPY ./docker/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
+#COPY ./docker/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
