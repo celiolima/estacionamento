@@ -12,15 +12,15 @@ services:
     #  - "8080:80"
     working_dir: /var/www/html
     environment:
-      - APACHE_CONF_PATH=/docker/apache
-      - PHP_INI_PATH=/docker/apache
+      - APACHE_CONF_PATH=/docker/apache/apache2.conf
+      - PHP_INI_PATH=/docker/php/php.ini
       - ROOT_PATH=/app
     volumes:
       #- "./app:/var/www/html"
       #- "./docker/php/php.ini:/usr/local/etc/php/php.ini"
       #- "./docker/apache/apache2.conf:/etc/apache2/apache2.conf"
       - "${APACHE_CONF_PATH}:/usr/local/etc/php/php.ini"
-      - "${HOST_CONF_PATH}:/etc/apache2/apache2.conf"
+      - "${PHP_INI_PATH}:/etc/apache2/apache2.conf"
       - "${ROOT_PATH}:/var/www/html"
       # Logs
       - "./logs/apache:/var/log/apache2"
