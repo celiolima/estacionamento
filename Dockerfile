@@ -1,14 +1,18 @@
 # Dockerfile
 FROM php:7.4-apache
 
+WORKDIR /var/www/html
+
+# Copiar raiz
+COPY ./app /var/www/html
 # Ativa o mod_rewrite do Apache
 RUN a2enmod rewrite
 
 # Copiar seu php.ini
-COPY php.ini /usr/local/etc/php/php.ini
+COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 
 # (Opcional) VirtualHost customizado
-COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+COPY ./docker/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
@@ -26,4 +30,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql mbstring exif intl gd zip opcache bcmath soap
+
+EXPOSE 80
 

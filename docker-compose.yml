@@ -5,30 +5,26 @@ services:
     #image: php:7.4-apache
     container_name: codeigniter_app   
     build:      
-      context: ./docker/php
+      context: .
       dockerfile: Dockerfile
     restart: always
     #ports:
     #  - "8080:80"    
-    volumes:  
-      - ./app:/var/www/html
-      # Logs
-      - ./logs/apache:/var/log/apache2
-      - ./logs/php:/var/log/php
+  
     depends_on:
       - mysql
     labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.app.rule=Host(`fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
-            - "traefik.http.routers.app.entrypoints=websecure"
-            - "traefik.http.routers.app.tls=true"
-            - "traefik.http.routers.app.tls.certresolver=le"
-            - "traefik.http.services.app.loadbalancer.server.port=80"
-            # Middleware de segurança
-            - "traefik.http.routers.app.middlewares=security-headers"
-            # Health check
-            - "traefik.http.services.app.loadbalancer.healthcheck.path=/"
-            - "traefik.http.services.app.loadbalancer.healthcheck.interval=30s"
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`fbjuazeiro.stesistemas.com`)" # Troque pelo seu dominio ou subdominio
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls=true"
+      - "traefik.http.routers.app.tls.certresolver=le"
+      - "traefik.http.services.app.loadbalancer.server.port=80"
+      # Middleware de segurança
+      - "traefik.http.routers.app.middlewares=security-headers"
+      # Health check
+      - "traefik.http.services.app.loadbalancer.healthcheck.path=/"
+      - "traefik.http.services.app.loadbalancer.healthcheck.interval=30s"
            
     networks:
       - estacionamento
