@@ -2,47 +2,14 @@
 services:
   # Servidor Web com PHP 7.4
   app:
-    image: php:7.4-apache
-    container_name: codeigniter_app
-    # Comandos para instalar extensões PHP necessárias
-    command: >
-      sh -c "
-        apt-get update &&
-        apt-get install -y --no-install-recommends
-          libzip-dev
-          libpng-dev
-          libjpeg-dev
-          libfreetype6-dev
-          libssl-dev
-          libxml2-dev
-          libicu-dev
-          default-mysql-client
-          git
-          curl
-          unzip &&
-        docker-php-ext-configure gd --with-freetype --with-jpeg &&
-        docker-php-ext-install
-          pdo
-          pdo_mysql
-          mysqli
-          gd
-          zip
-          intl
-          opcache
-          exif
-          bcmath
-          soap &&
-        a2enmod rewrite headers &&
-        apt-get clean &&
-        rm -rf /var/lib/apt/lists/* &&
-        apache2-foreground
-      "
-    #build:      
-    #  context: ./docker/php
-    #  dockerfile: Dockerfile
+    #image: php:7.4-apache
+    container_name: codeigniter_app   
+    build:      
+      context: ./docker/php
+      dockerfile: Dockerfile
     restart: always
-    #ports:#
-    #  - "8#080:80"
+    #ports:
+    #  - "8080:80"
     volumes:
       - ./:/var/www/html
       - ./docker/php/:/usr/local/etc/php/php.ini
