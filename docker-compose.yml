@@ -3,13 +3,13 @@ services:
   # Servidor Web com PHP 7.4
   app:
     #image: php:7.4-apache
-    container_name: codeigniter_app   
+    #container_name: app 
     build:      
       context: .
       dockerfile: Dockerfile
     restart: always
-    #ports:
-    #  - "8080:80"    
+    ports:
+      - "8089:80"    
   
     depends_on:
       - mysql
@@ -33,7 +33,7 @@ services:
   # Banco de dados MySQL
   mysql:
     image: mysql:5.7
-    container_name: codeigniter_mysql
+    #container_name: codeigniter_mysql
     restart: always
     #ports:
     #  - "3306:3306"
@@ -51,7 +51,7 @@ services:
   # phpMyAdmin
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: codeigniter_phpmyadmin
+    #container_name: codeigniter_phpmyadmin
     restart: always
     #ports:
     #  - "8081:80"
