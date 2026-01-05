@@ -21,10 +21,10 @@ services:
       - "traefik.http.routers.app.tls.certresolver=le"
       - "traefik.http.services.app.loadbalancer.server.port=80"
       # Middleware de segurança
-      - "traefik.http.routers.app.middlewares=security-headers"
+      #- "traefik.http.routers.app.middlewares=security-headers"
       # Health check
-      - "traefik.http.services.app.loadbalancer.healthcheck.path=/"
-      - "traefik.http.services.app.loadbalancer.healthcheck.interval=30s"
+      #- "traefik.http.services.app.loadbalancer.healthcheck.path=/"
+      #- "traefik.http.services.app.loadbalancer.healthcheck.interval=30s"
            
     networks:
       - estacionamento
